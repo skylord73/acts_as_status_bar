@@ -45,7 +45,7 @@ module ActsAsStatusBar
       end
       
       def status_bar_delete
-        status_bar.
+        status_bar.delete
       end
       
       def status_bar_set_max(value)
