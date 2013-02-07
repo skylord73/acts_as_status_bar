@@ -1,5 +1,5 @@
 module ActsAsStatusBar
-  class StatusBar < Hash
+  class StatusBar
     
     # ==CLASS Methods
     class<<self
@@ -44,7 +44,10 @@ module ActsAsStatusBar
       session[:acts_as_status_bar] ||= {}
       session[:acts_as_status_bar][id] ||= {}
       session[:acts_as_status_bar][id][:id] = id
-      session[:acts_as_status_bar][id]
+    end
+    
+    def status_bar
+      @session[:acts_as_status_bar][id]
     end
     
     private
