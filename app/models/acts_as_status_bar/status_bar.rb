@@ -1,9 +1,52 @@
 module ActsAsStatusBar
-  class StatusBar < ActiveRecord::Base
-    set_table_name "acts_as_status_bar"
+  class StatusBar
     
-    def to_status_bar
-      Hash['value', self.current].to_xml
+    # ==CLASS Methods
+    class<<self
+      #Start Private Class Methods
+      
+      def delete(session, status_bar)
+        session[:acts_as_status_bar].delete(status_bar[:id])
+      end
+      
+      def current(status_bar)
+        status_bar[:current]
+      end
+      
+      def set_max(status_bar, value)
+        status_bar[:max]= value
+      end
+
+      def max(status_bar)
+        status_bar[:max]
+      end
+
+      def inc(staus_bar, value)
+        status_bar[:current] = (status_bar[:current] || 0) + value 
+      end
+
+      def to_xml(status_bar)
+        Hash['value', status_bar[:current]].to_xml
+      end
+      
+      private
+      
     end
+    
+    # ==INSTANCE Methods
+    def initialize(session)
+      session[:acts_as_status_bar] ||= {}
+      session[:acts_as_status_bar][id] ||= {}
+      session[:acts_as_status_bar][id][:id] = id
+      session[:acts_as_status_bar][id]
+    end
+    
+    private
+    
+    def id
+      @session.session_id
+    end
+    
+    
   end
 end

@@ -1,10 +1,10 @@
 module ActsAsStatusBar
   class StatusBarController < ::ApplicationController
+    @status_bar = params[:id]
     def edit
-      @status_bar = ActsAsStatusBar::StatusBar.find(params[:id])
       respond_to do |format|
         format.html
-        format.xml {render :inline => @status_bar.to_status_bar}
+        format.xml {render :inline => ActsAsStatusBar::StatusBar.to_xml(@status_bar)}
       end
     end
   end
