@@ -39,9 +39,11 @@ module ActsAsStatusBar
     
     # ==INSTANCE Methods
     def initialize(session)
+      @session = session
       session[:acts_as_status_bar] ||= {}
       session[:acts_as_status_bar][id] ||= {}
       session[:acts_as_status_bar][id][:id] = id
+      mylog("initialize: #{@session.inspect}")
       session[:acts_as_status_bar][id]
     end
     
