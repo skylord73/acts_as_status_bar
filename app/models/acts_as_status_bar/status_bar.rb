@@ -1,5 +1,5 @@
 module ActsAsStatusBar
-  class StatusBar
+  class StatusBar < Hash
     
     # ==CLASS Methods
     class<<self
