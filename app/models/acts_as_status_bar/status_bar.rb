@@ -50,7 +50,7 @@ module ActsAsStatusBar
     private
     
     def id
-      @session.session_id
+      @session[:session_id]
     end
     
     
