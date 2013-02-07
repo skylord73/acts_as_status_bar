@@ -6,7 +6,7 @@ module ActsAsStatusBarHelper
     status_bar = ActsAsStatusBar::StatusBar.find(session,id)
     mylog("status_bar:  id:#{id.inspect}  status_bar#{status_bar.inspect}")
     url = edit_acts_as_status_bar_status_bar_path(id, :format => :xml)
-    total = statys_bar.max
+    total = status_bar.max
     content_tag(:div, :id => "progress-bar-container", :align => 'center') do
       content_tag(:p) do
         concat I18n.t(:label, :scope => :progress_bar)
