@@ -24,6 +24,12 @@ module ActsAsStatusBar
       session[:acts_as_status_bar][id][:id] = id
     end
     
+    #Inizializza utilzzando un'altra status bar
+    def status_bar=(sb)
+      self.status_bar = sb
+      self.status_bar_id = sb.id
+    end
+    
     #Cancella la barra con id
     def delete
       session[:acts_as_status_bar].delete(@id)
