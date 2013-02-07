@@ -23,6 +23,7 @@ module ActsAsStatusBar
       #   end
       def acts_as_status_bar(options={})
         attr_accessor :status_bar_id
+        attr_accessor :status_bar
         extend ActsAsStatusBar::StatusBarBase::SingletonMethods
         include ActsAsStatusBar::StatusBarBase::InstanceMethods
       end
