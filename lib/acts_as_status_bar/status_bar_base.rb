@@ -40,8 +40,9 @@ module ActsAsStatusBar
     module InstanceMethods
       
       def status_bar_init(session)
-        status_bar = ActsAsStatusBar::StatusBar.new(session, status_bar_id)
-        status_bar_id = status_bar.id
+        self.status_bar = ActsAsStatusBar::StatusBar.new(session, self.status_bar_id)
+        self.status_bar_id = self.status_bar.id
+        mylog("status_bar_init: status_bar#{self.status_bar.inspect}, status_bar_id:#{self.status_bar_id}")
       end
       
       def status_bar_delete
