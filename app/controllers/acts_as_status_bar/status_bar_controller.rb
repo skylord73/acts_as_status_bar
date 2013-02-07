@@ -1,6 +1,6 @@
 module ActsAsStatusBar
   class StatusBarController < ::ApplicationController
-    @status_bar = params[:id]
+    @status_bar = ActsAsStatusBar::StatusBar.find(session,params[:id])
     def edit
       respond_to do |format|
         format.html
