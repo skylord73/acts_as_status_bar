@@ -1,5 +1,5 @@
 module ActsAsStatusBar
-  class StatusBar < ::ApplicationController
+  class StatusBarController < ::ApplicationController
     def edit
       @status_bar = ActsAsStatusBar::StatusBar.find(params[:id])
       respond_to do |format|
