@@ -35,12 +35,16 @@ module ActsAsStatusBar
       def status_bar_init
         ActsAsStatusBar::StatusBar.create.id
       end
+      
+      def status_bar_delete(id)
+        ActsAsStatusBar::StatusBar.find(id).delete
+      end
     end
     
     #Instance methods for the mixin
     module InstanceMethods
       
-      def status_bar_max(id,value)
+      def status_bar_set_max(id,value)
         ActsAsStatusBar::StatusBar.where(:id => id).update_all(:max => value)
       end
       
@@ -58,10 +62,6 @@ module ActsAsStatusBar
       
       def status_bar_current(id)
         ActsAsStatusBar::StatusBar.find(id).current
-      end
-      
-      def status_bar_delete(id)
-        ActsAsStatusBar::StatusBar.find(id).delete
       end
       
       private
