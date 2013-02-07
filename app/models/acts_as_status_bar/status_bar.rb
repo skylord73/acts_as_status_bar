@@ -29,6 +29,10 @@ module ActsAsStatusBar
         Hash['value', status_bar[:current]].to_xml
       end
       
+      def find(session,id)
+        session[:acts_as_status_bar][id]
+      end
+      
       private
       
     end
