@@ -39,6 +39,10 @@ module ActsAsStatusBar
       def status_bar_delete(id)
         ActsAsStatusBar::StatusBar.find(id).delete
       end
+      
+      def status_bar_current(id)
+        ActsAsStatusBar::StatusBar.find(id).current
+      end
     end
     
     #Instance methods for the mixin
@@ -58,10 +62,6 @@ module ActsAsStatusBar
       
       def status_bar_dec(id, value = 1)
         _update_status_bar(id, value * -1)
-      end
-      
-      def status_bar_current(id)
-        ActsAsStatusBar::StatusBar.find(id).current
       end
       
       private
