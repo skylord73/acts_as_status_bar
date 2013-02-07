@@ -3,7 +3,7 @@ module ActsAsStatusBarHelper
   # Scrive html script tag del costruttore della progress bar
   def status_bar(id)
     #mylog("ProgressBarHelper/progress_bar - :#{url.inspect} - #{total.inspect}")
-    url = acts_as_status_bar_status_bar_index_path(id, :format => :xml)
+    url = edit_acts_as_status_bar_status_bar_path(id, :format => :xml)
     total = ActsAsStatusBar::StatusBar.find(id).max
     content_tag(:div, :id => "progress-bar-container", :align => 'center') do
       content_tag(:p) do
