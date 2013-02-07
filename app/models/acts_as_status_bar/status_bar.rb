@@ -51,7 +51,11 @@ module ActsAsStatusBar
       status_bar[:current]
     end
     
-    def inc(value)
+    def dec(value=1)
+      inc(value*-1)
+    end
+    
+    def inc(value=1)
       status_bar[:current] = (status_bar[:current] || 0) + value 
     end
     
