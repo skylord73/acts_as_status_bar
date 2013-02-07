@@ -21,7 +21,7 @@ module ActsAsStatusBar
         status_bar[:max]
       end
 
-      def inc(staus_bar, value)
+      def inc(status_bar, value)
         status_bar[:current] = (status_bar[:current] || 0) + value 
       end
 
