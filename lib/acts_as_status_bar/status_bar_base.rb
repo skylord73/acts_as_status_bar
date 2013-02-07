@@ -49,7 +49,9 @@ module ActsAsStatusBar
     module InstanceMethods
       
       def status_bar_set_max(id,value)
-        ActsAsStatusBar::StatusBar.where(:id => id).update_all(:max => value)
+        ActsAsStatusBar::StatusBar.transaction do
+          ActsAsStatusBar::StatusBar.where(:id => id).update_all(:max => value)
+        end
       end
       
       def status_bar_max(id)
@@ -67,9 +69,11 @@ module ActsAsStatusBar
       private
     
       def _update_status_bar(id, value)
-        status_bar = ActsAsStatusBar::StatusBar.find(id)
-        status_bar.current = (status_bar.current || 0 ) + value
-        status_bar.save
+        ActsAsStatusBar::StatusBar.transaction do
+          status_bar = ActsAsStatusBar::StatusBar.find(id)
+          status_bar.current = (status_bar.current || 0 ) + value
+          status_bar.save
+        end
       end
               
     end
