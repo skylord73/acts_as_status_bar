@@ -33,36 +33,35 @@ module ActsAsStatusBar
     
     # Singleton methods for the mixin
     module SingletonMethods
-      def status_bar_init
-        ActsAsStatusBar::StatusBar.new
-      end
       
-      def status_bar_delete(session, id)
-        ActsAsStatusBar::StatusBar.delete(session, id)
-      end
-      
-      def status_bar_current(id)
-        ActsAsStatusBar::StatusBar.current(id)
-      end
     end
     
     #Instance methods for the mixin
     module InstanceMethods
       
-      def status_bar_set_max(id,value)
-        ActsAsStatusBar::StatusBar.set_max(id, value)
+      def status_bar_init(session)
+        status_bar = ActsAsStatusBar::StatusBar.new(session, status_bar_id)
+        status_bar_id = status_bar.id
       end
       
-      def status_bar_max(id)
-        ActsAsStatusBar::StatusBar.max(id)
+      def status_bar_delete
+        status_bar.
       end
       
-      def status_bar_inc(id, value = 1)
-        ActsAsStatusBar::StatusBar.inc(id, value)
+      def status_bar_set_max(value)
+        status_bar.set_max(value)
+      end
+      
+      def status_bar_max
+        status_bar.max
+      end
+      
+      def status_bar_inc(value = 1)
+        status_bar.inc(value)
       end
       
       def status_bar_dec(id, value = 1)
-        ActsAsStatusBar::StatusBar.inc(id, value * -1)
+        status_bar.inc(value * -1)
       end
       
       private

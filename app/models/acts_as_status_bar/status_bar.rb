@@ -5,32 +5,9 @@ module ActsAsStatusBar
     class<<self
       #Start Private Class Methods
       
-      def delete(session, status_bar)
-        session[:acts_as_status_bar].delete(status_bar[:id])
-      end
-      
-      def current(status_bar)
-        status_bar[:current]
-      end
-      
-      def set_max(status_bar, value)
-        status_bar[:max]= value
-      end
-
-      def max(status_bar)
-        status_bar[:max]
-      end
-
-      def inc(status_bar, value)
-        status_bar[:current] = (status_bar[:current] || 0) + value 
-      end
-
-      def to_xml(status_bar)
-        Hash['value', status_bar[:current]].to_xml
-      end
-      
+      #Instanzia una nuova barra con id 
       def find(session,id)
-        session[:acts_as_status_bar][id]
+        new(session,id)
       end
       
       private
@@ -38,24 +15,51 @@ module ActsAsStatusBar
     end
     
     # ==INSTANCE Methods
-    def initialize(session)
+    def initialize(session, session_id = nil)
       @session = session
+      @id = session_id
       mylog("initialize: #{@session.inspect}")
       session[:acts_as_status_bar] ||= {}
       session[:acts_as_status_bar][id] ||= {}
       session[:acts_as_status_bar][id][:id] = id
     end
     
+    #Cancella la barra con id
+    def delete
+      session[:acts_as_status_bar].delete(@id)
+    end
+    
     def status_bar
       @session[:acts_as_status_bar][id]
     end
     
-    private
-    
-    def id
-      @session[:session_id]
+    def set_max(value)
+      status_bar[:max]= value
+    end
+
+    def max
+      status_bar[:max]
     end
     
+    def current
+      status_bar[:current]
+    end
+    
+    def inc(value)
+      status_bar[:current] = (status_bar[:current] || 0) + value 
+    end
+    
+    def to_xml
+      Hash['value', status_bar[:current]].to_xml
+    end
+    
+    #Bisognerà costruire id con session + random number, altrimenti non posso avere due progress
+    #sulla stessa sessione
+    def id
+      @id ||= @session[:session_id]
+    end
+    
+    private
     
   end
 end
