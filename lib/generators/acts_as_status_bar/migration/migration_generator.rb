@@ -1,4 +1,4 @@
-equire 'rails/generators'
+require 'rails/generators'
 require 'rails/generators/migration'
 
 module ActsAsStatusBar
