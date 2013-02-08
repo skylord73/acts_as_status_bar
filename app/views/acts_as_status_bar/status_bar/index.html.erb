@@ -1,5 +1,6 @@
 <html>
 	<body>
+		<p><%=@status_bars.inspect%></p>
 		<% @status_bars.each do |status_bar|%>
 			<li><%=@status_bar.try(:keys).try(:first)%>:<%= @status_bar.try(:values).try(:first).inspect %></li>
 		<% end %>
