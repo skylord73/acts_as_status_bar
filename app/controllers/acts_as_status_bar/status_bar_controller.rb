@@ -1,7 +1,7 @@
 module ActsAsStatusBar
   class StatusBarController < ::ApplicationController
     def index
-      @status_bars=ActsAsStatusBar::StatusBar.all.sort {|a,b| a.keys.first <=> b.keys.first}
+      @status_bars=ActsAsStatusBar::StatusBar.all
     end
     
     def edit

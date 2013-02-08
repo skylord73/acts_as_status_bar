@@ -90,9 +90,9 @@ module ActsAsStatusBar
     end
     
     def _all
-      out = []
-      ids.each {|i| @store.transaction(true) {out << {i => @store[i]}}}
-      out
+      out = {}
+      ids.each {|i| @store.transaction(true) {out[i] = @store[i]}}
+      Hash[out.sort]
     end
     
     def _new_id

@@ -1,8 +1,19 @@
 <html>
 	<body>
 		<h1>Active Status Bars</h1>
-		<% @status_bars.each do |status_bar|%>
-			<li><%=status_bar.try(:keys).try(:first)%>:<%= status_bar.try(:values).try(:first).inspect %></li>
+		<% @status_bars.each do |k,v|%>
+			<li><%=link_to 	status_bar, 
+							'Delete',
+				 			acts_as_status_bar_status_bar_path(k),
+							:html_options => {:method => :delete}
+				%>
+				<%= k %>:
+				<%= v.inspect %>
+			</li>
 		<% end %>
+		<%=link_to 'Delete All',
+					destroy_all_acts_as_status_bar_status_bar_index_path,
+					:html_options => {:method => :delete}
+		%>
 	</body>
 </html>
