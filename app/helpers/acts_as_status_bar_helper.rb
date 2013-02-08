@@ -18,14 +18,15 @@ module ActsAsStatusBarHelper
     end +
     javascript_tag(%Q[
       function status_bar_init(){
-        var progress = new AjaxProgressBar('progress-bar-container','progress-bar', 'bar', {
+        var progress = new ActsAsStatusBar('progress-bar-container','progress-bar', 'bar', {
           frequency: 3,
           total: #{total || 100},
           url: "#{url}"
         });
         progress.start();
       }
-    ])
+    ]) +
+    javascript_include_tag :acts_as_status_bar_javascript
   end
 end
 
