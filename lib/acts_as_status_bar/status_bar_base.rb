@@ -24,7 +24,6 @@ module ActsAsStatusBar
       def acts_as_status_bar(options={})
         attr_accessor :status_bar_id
         attr_accessor :status_bar
-        after_save :_delete_status_bar
         extend ActsAsStatusBar::StatusBarBase::SingletonMethods
         include ActsAsStatusBar::StatusBarBase::InstanceMethods
       end
@@ -52,11 +51,6 @@ module ActsAsStatusBar
       
       private
       
-      def _delete_status_bar
-        mylog("_delete_status_bar")
-        self.status_bar.try(:delete)
-      end
-              
     end
     
 
