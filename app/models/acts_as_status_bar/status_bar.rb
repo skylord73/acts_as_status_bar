@@ -51,7 +51,7 @@ module ActsAsStatusBar
 
     #legge il fondo scala
     def max
-      _get(:max) || 0
+      _get(:max)
     end
     
     #legge il valore corrente
@@ -89,10 +89,11 @@ module ActsAsStatusBar
       ids.each {|i| _delete(i)}
     end
     
+    #Sarebbe carino li ordinasse... ma è una palla!!
     def _all
       out = {}
       ids.each {|i| @store.transaction(true) {out[i] = @store[i]}}
-      Hash[out.sort]
+      out
     end
     
     def _new_id
