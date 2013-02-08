@@ -2,8 +2,7 @@
 	<body>
 		<h1>Active Status Bars</h1>
 		<% @status_bars.each do |k,v|%>
-			<li><%=link_to 	status_bar, 
-							'Delete',
+			<li><%=link_to	'Delete',
 				 			acts_as_status_bar_status_bar_path(k),
 							:html_options => {:method => :delete}
 				%>
