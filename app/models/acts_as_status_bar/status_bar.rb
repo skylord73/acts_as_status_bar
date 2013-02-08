@@ -10,7 +10,13 @@ module ActsAsStatusBar
       
       def delete_all
         store = new
-        store.delete_all
+        store.send :_delete_all
+      end
+      
+      #Visulaizza tutte le barre nel formato {id => {:max, :current, ...}}
+      def all
+        store = new
+        store.send :_all
       end
       
       private
@@ -21,16 +27,13 @@ module ActsAsStatusBar
     def initialize(session_id = nil)
       @store = PStore.new("/tmp/acts_as_status_bar.store")
       @id = session_id
+      @id = @id.to_i if @id
       mylog("initialize: #{@store.inspect}")
     end
     
     #restituisce l'id della barra di stato instanziata
     def id
       @id ||= _new_id
-    end
-    
-    def ids
-      @store.transaction {@store.roots} if @store
     end
     
     #Cancella la barra
@@ -40,12 +43,9 @@ module ActsAsStatusBar
       @store = nil
     end
     
-    def delete_all
-      ids.each {|i| _delete(i)}
-    end
-    
     #Imposta il fondo scala
     def max=(value)
+      mylog("max: value=#{value}")
       _set :max, value
     end
 
@@ -79,6 +79,21 @@ module ActsAsStatusBar
     end
     
     private
+    
+    #restituisce tutti gli id
+    def ids
+      @store.transaction {@store.roots} if @store
+    end
+    
+    def _delete_all
+      ids.each {|i| _delete(i)}
+    end
+    
+    def _all
+      out = []
+      ids.each {|i| @store.transaction(true) {out << {i => @store[i]}}}
+      out
+    end
     
     def _new_id
       out = nil
