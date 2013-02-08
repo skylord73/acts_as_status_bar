@@ -42,7 +42,6 @@ module ActsAsStatusBar
       def status_bar_init
         self.status_bar = ActsAsStatusBar::StatusBar.new(self.status_bar_id)
         self.status_bar_id = self.status_bar.id
-        mylog("status_bar_init: status_bar#{self.status_bar.inspect}, status_bar_id:#{self.status_bar_id}")
       end
       
       def status_bar=(sb)
