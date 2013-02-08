@@ -4,7 +4,7 @@
 		<% @status_bars.each do |k,v|%>
 			<li><%=link_to	'Delete',
 				 			acts_as_status_bar_status_bar_path(k),
-							:html_options => {:method => :delete}
+							:method => :delete
 				%>
 				<%= k %>:
 				<%= v.inspect %>
@@ -12,7 +12,7 @@
 		<% end %>
 		<%=link_to 'Delete All',
 					destroy_all_acts_as_status_bar_status_bar_index_path,
-					:html_options => {:method => :delete}
+					:method => :delete
 		%>
 	</body>
 </html>
