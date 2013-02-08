@@ -19,7 +19,7 @@ module ActsAsStatusBar
     
     # ==INSTANCE Methods
     def initialize(session_id = nil)
-      @store = PStore.new("log/acts_as_status_bar.store")
+      @store = PStore.new("/tmp/acts_as_status_bar.store")
       @id = session_id
       mylog("initialize: #{@store.inspect}")
     end
