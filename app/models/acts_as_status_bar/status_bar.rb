@@ -83,7 +83,7 @@ module ActsAsStatusBar
     #restituisce il valore corrente in xml
     #nel formato comatibile con la status bar
     def to_xml
-      Hash['value', _get(:current)].to_xml
+      Hash['value', _get(:current) || 0].to_xml
     end
     
     private
