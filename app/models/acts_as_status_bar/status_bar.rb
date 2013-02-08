@@ -59,19 +59,27 @@ module ActsAsStatusBar
       _get(:current) || 0
     end
     
+    def start_at
+      _get(:start_at)
+    end
+    
     #decrementa il valore corrente
     def dec(value=1)
       inc(value*-1)
     end
     
     #incrementa il valore corrente
+    #e imposta start_at al tempo corrente se è vuoto
     def inc(value=1)
       _set(:current, (_get(:current) || 0) + value) 
+      _set(:start_at, Time.now.to_f) unless _get(:start_at)
     end
     
+    #Restituisce il tempo stimato di fine attività
     def finish_in
       ((_get(:current_at) || 0) - (_get(:start_at) || 0))/current*(max || 0)
     end
+    
     #restituisce il valore corrente in xml
     #nel formato comatibile con la status bar
     def to_xml
@@ -100,7 +108,7 @@ module ActsAsStatusBar
       out = nil
       @store.transaction do
         out = (@store.roots.sort.last || 0) + 1
-        @store[out] = {:max => nil, :current => nil, :start_at => Time.now.to_f, :current_at => nil }
+        @store[out] = {:max => nil, :current => nil, :start_at => nil, :current_at => nil }
       end if @store
       out
     end

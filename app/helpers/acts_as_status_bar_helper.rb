@@ -18,7 +18,6 @@ module ActsAsStatusBarHelper
     end +
     javascript_tag(%Q[
       function status_bar_init(){
-        alert('ciao');
         var progress = new AjaxProgressBar('progress-bar-container','progress-bar', 'bar', {
           frequency: 3,
           total: #{total || 100},
