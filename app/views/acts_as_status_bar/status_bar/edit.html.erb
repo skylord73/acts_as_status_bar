@@ -1,1 +1,7 @@
-<%= @status_bar.inspect %>
+<html>
+	<body>
+		<p>STATUS_BAR:<%= @status_bar.inspect %></p>
+		<p>PROGRESS:<%= @status_bar.current %>/<%= @status_bar.max %></p>
+		<p>FINISH IN:<%= @status_bar.finish_in %> s</p>
+	</body>
+</html>

@@ -2,8 +2,7 @@
 module ActsAsStatusBarHelper
   # Scrive html script tag del costruttore della progress bar
   def status_bar(id)
-    
-    status_bar = ActsAsStatusBar::StatusBar.find(session,id)
+    status_bar = ActsAsStatusBar::StatusBar.new(id)
     mylog("status_bar:  id:#{id.inspect}  status_bar#{status_bar.inspect}")
     url = edit_acts_as_status_bar_status_bar_path(id, :format => :xml)
     total = status_bar.max

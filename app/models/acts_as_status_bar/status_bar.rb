@@ -1,13 +1,16 @@
+require 'pstore'
+
 module ActsAsStatusBar
+  #La classe si basa su PStore, che permette di salvare un hash su file (tmp/act_as_status_bar.store)
   class StatusBar
     
     # ==CLASS Methods
     class<<self
       #Start Private Class Methods
       
-      #Instanzia una nuova barra con id 
-      def find(session,id)
-        new(session,id)
+      def delete_all
+        store = new
+        store.delete_all
       end
       
       private
@@ -15,61 +18,90 @@ module ActsAsStatusBar
     end
     
     # ==INSTANCE Methods
-    def initialize(session, session_id = nil)
-      @session = session
+    def initialize(session_id = nil)
+      @store = PStore.new("tmp/acts_as_status_bar.store")
       @id = session_id
-      mylog("initialize: #{@session.inspect}")
-      session[:acts_as_status_bar] ||= {}
-      session[:acts_as_status_bar][id] ||= {}
-      session[:acts_as_status_bar][id][:id] = id
+      mylog("initialize: #{@store.inspect}")
     end
     
-    #Inizializza utilzzando un'altra status bar
-    def status_bar=(sb)
-      self.status_bar = sb
-      self.status_bar_id = sb.id
+    #restituisce l'id della barra di stato instanziata
+    def id
+      @id ||= _new_id
     end
     
-    #Cancella la barra con id
+    def ids
+      @store.transaction {@store.roots} if @store
+    end
+    
+    #Cancella la barra
     def delete
-      session[:acts_as_status_bar].delete(@id)
+      _delete(id)
+      @id = nil
+      @store = nil
     end
     
-    def status_bar
-      @session[:acts_as_status_bar][id]
+    def delete_all
+      ids.each {|i| _delete(i)}
     end
     
-    def set_max(value)
-      status_bar[:max]= value
+    #Imposta il fondo scala
+    def max=(value)
+      _set :max, value
     end
 
+    #legge il fondo scala
     def max
-      status_bar[:max]
+      _get(:max) || 0
     end
     
+    #legge il valore corrente
     def current
-      status_bar[:current]
+      _get(:current) || 0
     end
     
+    #decrementa il valore corrente
     def dec(value=1)
       inc(value*-1)
     end
     
+    #incrementa il valore corrente
     def inc(value=1)
-      status_bar[:current] = (status_bar[:current] || 0) + value 
+      _set(:current, (_get(:current) || 0) + value) 
     end
     
+    def finish_in
+      (_get(:current_at)-_get(:start_at))/current*(max || 0)
+    end
+    #restituisce il valore corrente in xml
+    #nel formato comatibile con la status bar
     def to_xml
-      Hash['value', status_bar[:current]].to_xml
-    end
-    
-    #Bisognerà costruire id con session + random number, altrimenti non posso avere due progress
-    #sulla stessa sessione
-    def id
-      @id ||= @session[:session_id]
+      Hash['value', _get(:current)].to_xml
     end
     
     private
+    
+    def _new_id
+      out = nil
+      @store.transaction do
+        out = (@store.roots.sort.last || 0) + 1
+        @store[out] = {:max => nil, :current => nil, :start_at => Time.now.to_f, :current_at => nil }
+      end if @store
+      out
+    end
+    
+    def _set(key,value)
+      i = id
+      @store.transaction {@store[i][:current_at] = Time.now.to_f; @store[i][key] = value} if @store
+    end
+    
+    def _get(key)
+      i = id
+      @store.transaction(true) {@store[i][key]} if @store
+    end
+    
+    def _delete(i)
+      @store.transaction {@store.delete(i)} if @store
+    end
     
   end
 end

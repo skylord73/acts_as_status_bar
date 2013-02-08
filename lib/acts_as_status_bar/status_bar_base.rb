@@ -39,30 +39,15 @@ module ActsAsStatusBar
     #Instance methods for the mixin
     module InstanceMethods
       
-      def status_bar_init(session)
-        self.status_bar = ActsAsStatusBar::StatusBar.new(session, self.status_bar_id)
+      def status_bar_init
+        self.status_bar = ActsAsStatusBar::StatusBar.new(self.status_bar_id)
         self.status_bar_id = self.status_bar.id
         mylog("status_bar_init: status_bar#{self.status_bar.inspect}, status_bar_id:#{self.status_bar_id}")
       end
       
-      def status_bar_delete
-        status_bar.delete
-      end
-      
-      def status_bar_set_max(value)
-        status_bar.set_max(value)
-      end
-      
-      def status_bar_max
-        status_bar.max
-      end
-      
-      def status_bar_inc(value = 1)
-        status_bar.inc(value)
-      end
-      
-      def status_bar_dec(id, value = 1)
-        status_bar.inc(value * -1)
+      def status_bar=(sb)
+        @status_bar = sb
+        @status_bar_id = sb.id
       end
       
       private
