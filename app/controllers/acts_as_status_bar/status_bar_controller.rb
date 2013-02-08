@@ -6,6 +6,7 @@ module ActsAsStatusBar
     
     def show
       @status_bar = ActsAsStatusBar::StatusBar.new(params[:id].to_i)
+      mylog("show: #{@status_bar.to_xml.inspect}")
       respond_to do |format|
         format.html
         format.xml {render :inline => @status_bar.to_xml}
