@@ -1,5 +1,7 @@
 <html>
 	<body>
-		<p>STATUS_BARS:<%= @status_bars.inspect %></p>
+		<% @status_bars.each do |status_bar|%>
+			<li><%=@status_bar.keys.first%>:<%= @status_bar.values.first.inspect %></li>
+		<% end %>
 	</body>
 </html>
