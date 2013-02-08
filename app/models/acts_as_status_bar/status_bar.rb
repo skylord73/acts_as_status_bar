@@ -18,6 +18,12 @@ module ActsAsStatusBar
         store.send :_delete_all
       end
       
+      #Verifica se la ba barra esiste
+      def valid?(id)
+        store = new(id)
+        store.send(:ids).include?(id)
+      end
+      
       #Visulaizza tutte le barre nel formato {id => {:max, :current, ...}}
       def all
         store = new
@@ -40,6 +46,11 @@ module ActsAsStatusBar
       @id ||= _new_id
     end
     
+    def valid?
+      i = id
+      ids.include?(i)
+    end
+
     #Cancella la barra
     def delete
       _delete(id)
@@ -92,18 +103,20 @@ module ActsAsStatusBar
     
     #Restituisce il tempo stimato di fine attività
     def finish_in
-      distance_of_time_in_words((current_at - start_at)/current* max) 
+      current > 0 ? distance_of_time_in_words((current_at - start_at)/current* max) : "non disponibile"
     end
     
     #restituisce il valore corrente in xml
     #nel formato comatibile con la status bar
     #:type => :percent  #Normalizza i valori a 100
     def to_xml
+      val = ['Completato', 100]
       val = case type
         when :percent then ["#{current} (#{percent}%) tempo stimato #{finish_in}", percent]
       else
         ["#{current}/#{max} tempo stimato #{finish_in}", percent]
-      end 
+      end if valid?
+      
       Hash['value', val[0], 'percent', val[1]].to_xml
     end
     
