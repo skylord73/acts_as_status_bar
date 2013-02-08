@@ -28,7 +28,6 @@ module ActsAsStatusBar
       @store = PStore.new("/tmp/acts_as_status_bar.store")
       @id = session_id
       @id = @id.to_i if @id
-      mylog("initialize: #{@store.inspect}")
     end
     
     #restituisce l'id della barra di stato instanziata
@@ -45,7 +44,6 @@ module ActsAsStatusBar
     
     #Imposta il fondo scala
     def max=(value)
-      mylog("max: value=#{value}")
       _set :max, value
     end
 
@@ -83,7 +81,7 @@ module ActsAsStatusBar
     #restituisce il valore corrente in xml
     #nel formato comatibile con la status bar
     def to_xml
-      Hash['value', _get(:current) || 0].to_xml
+      Hash['value', _get(:current).to_i].to_xml
     end
     
     private
