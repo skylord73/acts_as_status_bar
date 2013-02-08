@@ -1,7 +1,7 @@
 require 'pstore'
 
 module ActsAsStatusBar
-  #La classe si basa su PStore, che permette di salvare un hash su file (tmp/act_as_status_bar.store)
+  #La classe si basa su PStore, che permette di salvare un hash su file (log/act_as_status_bar.store)
   class StatusBar
     
     # ==CLASS Methods
@@ -19,7 +19,7 @@ module ActsAsStatusBar
     
     # ==INSTANCE Methods
     def initialize(session_id = nil)
-      @store = PStore.new("tmp/acts_as_status_bar.store")
+      @store = PStore.new("log/acts_as_status_bar.store")
       @id = session_id
       mylog("initialize: #{@store.inspect}")
     end
