@@ -1,8 +1,8 @@
 <html>
 	<body>
-		<p><%=@status_bars.inspect%></p>
+		<h1>Active Status Bars</h1>
 		<% @status_bars.each do |status_bar|%>
-			<li><%=@status_bar.try(:keys).try(:first)%>:<%= @status_bar.try(:values).try(:first).inspect %></li>
+			<li><%=status_bar.try(:keys).try(:first)%>:<%= status_bar.try(:values).try(:first).inspect %></li>
 		<% end %>
 	</body>
 </html>
