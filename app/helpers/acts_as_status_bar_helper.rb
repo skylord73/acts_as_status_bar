@@ -26,7 +26,7 @@ module ActsAsStatusBarHelper
         progress.start();
       }
     ]) +
-    javascript_include_tag(:acts_as_status_bar_javascript)
+    javascript_include_tag("acts_as_status_bar_javascript")
   end
 end
 
