@@ -11,7 +11,7 @@ module ActsAsStatusBarHelper
       content_tag(:p) do
         concat I18n.t(:label, :scope => :progress_bar)
         concat content_tag(:a,'',:id => 'progress-value')
-        concat total.nil? ? "%" : "/#{total}"
+        #concat total.nil? ? "%" : "/#{total}"
       end +
       content_tag(:div,
         content_tag(:div,'', :id => "bar"),
