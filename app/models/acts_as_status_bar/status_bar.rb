@@ -70,7 +70,7 @@ module ActsAsStatusBar
     end
     
     def finish_in
-      (_get(:current_at)-_get(:start_at))/current*(max || 0)
+      ((_get(:current_at) || 0) - (_get(:start_at) || 0))/current*(max || 0)
     end
     #restituisce il valore corrente in xml
     #nel formato comatibile con la status bar
