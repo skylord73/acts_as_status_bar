@@ -3,6 +3,11 @@ require 'pstore'
 module ActsAsStatusBar
   #La classe si basa su PStore, che permette di salvare un hash su file (log/act_as_status_bar.store)
   class StatusBar
+    include ActionView::Helpers::DateHelper
+    
+    FREQUENCY = 10
+    MAX = 100
+    TYPE = :percent
     
     # ==CLASS Methods
     class<<self
@@ -49,16 +54,28 @@ module ActsAsStatusBar
 
     #legge il fondo scala
     def max
-      _get(:max)
+      _get(:max) || MAX
     end
     
     #legge il valore corrente
     def current
-      _get(:current) || 0
+      _get(:current).to_i
     end
     
     def start_at
-      _get(:start_at)
+      _get(:start_at) || 0
+    end
+    
+    def current_at
+      _get(:current_at) || 0
+    end
+    
+    def frequency
+      _get(:frequency) || FREQUENCY
+    end
+    
+    def percent
+      (current * 100 / max).to_i
     end
     
     #decrementa il valore corrente
@@ -68,23 +85,33 @@ module ActsAsStatusBar
     
     #incrementa il valore corrente
     #e imposta start_at al tempo corrente se è vuoto
-    def inc(value=1)
-      _set(:current, (_get(:current) || 0) + value) 
+    def inc(value=1) 
       _set(:start_at, Time.now.to_f) unless _get(:start_at)
+      _set(:current, current + value)
     end
     
     #Restituisce il tempo stimato di fine attività
     def finish_in
-      ((_get(:current_at) || 0) - (_get(:start_at) || 0))/current*(max || 0)
+      distance_of_time_in_words((current_at - start_at)/current* max) 
     end
     
     #restituisce il valore corrente in xml
     #nel formato comatibile con la status bar
+    #:type => :percent  #Normalizza i valori a 100
     def to_xml
-      Hash['value', _get(:current).to_i].to_xml
+      val = case type
+        when :percent then ["#{current} (#{percent}%) tempo stimato #{finish_in}", percent]
+      else
+        ["#{current}/#{max} tempo stimato #{finish_in}", percent]
+      end 
+      Hash['value', val[0], 'percent', val[1]].to_xml
     end
     
     private
+    
+    def type
+      _get(:type) || TYPE
+    end
     
     #restituisce tutti gli id
     def ids
@@ -106,7 +133,12 @@ module ActsAsStatusBar
       out = nil
       @store.transaction do
         out = (@store.roots.sort.last || 0) + 1
-        @store[out] = {:max => nil, :current => nil, :start_at => nil, :current_at => nil }
+        @store[out] = { :max => MAX, 
+                        :current => nil, 
+                        :start_at => nil, 
+                        :current_at => nil, 
+                        :frequency => FREQUENCY,
+                        :type => TYPE }
       end if @store
       out
     end
