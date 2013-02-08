@@ -53,6 +53,7 @@ module ActsAsStatusBar
       private
       
       def _delete_status_bar
+        mylog("_delete_status_bar")
         self.status_bar.try(:delete)
       end
               
