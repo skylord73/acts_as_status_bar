@@ -7,6 +7,7 @@ module ActsAsStatusBarHelper
     url = acts_as_status_bar_status_bar_path(id, :format => :xml)
     total = status_bar.percent
     frequency = status_bar.frequency
+    stylesheet_link_tag('acts_as_status_bar')+
     content_tag(:div, :id => "acts-as-status-bar-container", :align => 'center') do
       content_tag(:p, '', :id => 'acts-as-status-bar-message') +
       content_tag(:div,
