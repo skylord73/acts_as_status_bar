@@ -5,7 +5,7 @@ module ActsAsStatusBar
     end
     
     def show
-      @status_bar = ActsAsStatusBar::StatusBar.new(params[:id].to_i)
+      @status_bar = ActsAsStatusBar::StatusBar.new(:id => params[:id].to_i)
       mylog("show: #{@status_bar.to_xml.inspect}", "DEBUG", :CYAN)
       respond_to do |format|
         format.html
@@ -14,7 +14,7 @@ module ActsAsStatusBar
     end
     
     def destroy
-      @status_bar = ActsAsStatusBar::StatusBar.new(params[:id].to_i)
+      @status_bar = ActsAsStatusBar::StatusBar.new(:id => params[:id].to_i)
       @status_bar.delete
       redirect_to :action => "index"
     end

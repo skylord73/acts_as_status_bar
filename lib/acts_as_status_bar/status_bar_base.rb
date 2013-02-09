@@ -40,7 +40,7 @@ module ActsAsStatusBar
     module InstanceMethods
       
       def status_bar_init
-        self.status_bar = ActsAsStatusBar::StatusBar.new(self.status_bar_id)
+        self.status_bar = ActsAsStatusBar::StatusBar.new(:id => self.status_bar_id)
         self.status_bar_id = self.status_bar.id
       end
       
