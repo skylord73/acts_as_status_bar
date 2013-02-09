@@ -66,7 +66,6 @@ module ActsAsStatusBar
       @id = @id.to_i if @id
       @store = PStore.new(FILE)
       _define_methods
-      raise unless valid?
     end
     
     def add_field(field, default=nil)
@@ -82,8 +81,7 @@ module ActsAsStatusBar
     
     #Verifica se la barra richiesta esiste
     def valid?
-      i = id
-      ids.include?(i)
+      ids.include?(@id)
     end
 
     #Destroy the bar and return last values
