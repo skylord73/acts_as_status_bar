@@ -58,10 +58,15 @@ module ActsAsStatusBar
                     :type => TYPE,
                     :message => "" }
       @options.merge!(args.extract_options!)
-      _define_methods
-      @store = PStore.new(FILE)
       @id = @options.delete(:id)
       @id = @id.to_i if @id
+      @store = PStore.new(FILE)
+      _define_methods
+    end
+    
+    def add_field(field, default=nil)
+      _define_method(field.to_sym) unless @options[field.to_sym]
+      send("#{field.to_sym}=", default)
     end
     
     #restituisce l'id della barra di stato instanziata
@@ -142,7 +147,7 @@ module ActsAsStatusBar
     def _new_id
       out = nil
       @store.transaction do
-        out = (@store.roots.sort.last || 0) + 1
+        out = @store.roots.sort.last.to_i + 1
         @store[out] = @options
       end if @store
       out
@@ -182,29 +187,35 @@ module ActsAsStatusBar
       @options
     end
     
+    #costruisce tutti gli accesso dei metodi in @options
     def _define_methods
       @options.each_key do |method|
-          #Getters
-          self.class.send(:define_method, method) do
-            _get method.to_sym
-          end
-      
-          #Setters
-          self.class.send(:define_method, "#{method.to_s}=") do |value|
-            _set method, value
-          end
-      
-          #Incrementer
-          self.class.send(:define_method, "inc_#{method.to_s}") do |*args|
-            value = args.first || 1
-            _inc method, value
-          end
-      
-          #Decrementer
-          self.class.send(:define_method, "dec_#{method.to_s}") do |*args|
-            value = args.first || 1
-            _dec method, value
-          end
+        _define_method(method)
+      end
+    end
+    
+    #Costruisce gli accessors per il campo passato
+    def _define_method(method)
+      #Getters
+      self.class.send(:define_method, method) do
+        _get method.to_sym
+      end
+
+      #Setters
+      self.class.send(:define_method, "#{method.to_s}=") do |value|
+        _set method, value
+      end
+
+      #Incrementer
+      self.class.send(:define_method, "inc_#{method.to_s}") do |*args|
+        value = args.first || 1
+        _inc method, value
+      end
+
+      #Decrementer
+      self.class.send(:define_method, "dec_#{method.to_s}") do |*args|
+        value = args.first || 1
+        _dec method, value
       end
     end
     
