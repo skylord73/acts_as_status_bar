@@ -86,11 +86,12 @@ module ActsAsStatusBar
       ids.include?(i)
     end
 
-    #Cancella la barra
+    #Destroy the bar and return last values
     def delete
-      _delete(id)
+      out = _delete(id)
       @id = nil
       @store = nil
+      out
     end
     
     def percent
@@ -128,6 +129,13 @@ module ActsAsStatusBar
     #restituisce tutti gli id
     def ids
       @store.transaction {@store.roots} if @store
+    end
+    
+    #cancella la barra con id
+    def _delete(i)
+      out ={}
+      @store.transaction {out = @store.delete(i)} if @store
+      out
     end
     
     #Cancella tutte le barre
@@ -180,11 +188,6 @@ module ActsAsStatusBar
     def _get(key)
       i = id
       @store.transaction(true) {@store[i][key]} if @store
-    end
-    
-    #cancella la barra con id
-    def _delete(i)
-      @store.transaction {@store.delete(i)} if @store
     end
     
     def _options
