@@ -2,12 +2,18 @@ require 'pstore'
 
 module ActsAsStatusBar
   #La classe si basa su PStore, che permette di salvare un hash su file (log/act_as_status_bar.store)
+  #==Utilizzo
+  #
+  #E' possibile instanziare la barra con dei campi aggiuntivi, passati come lista di argomenti
+  #e relativi valori di defult
+  #new(:id => nil, )
   class StatusBar
     include ActionView::Helpers::DateHelper
     
     FREQUENCY = 10
     MAX = 100
     TYPE = :percent
+    FILE = "/tmp/acts_as_status_bar.store"
     
     # ==CLASS Methods
     class<<self
@@ -30,22 +36,41 @@ module ActsAsStatusBar
         store.send :_all
       end
       
+      def to_s
+        store = new
+        opt = []
+        store.send(:_options).each_key.map{|k| opt << ":#{k}" }
+        "#{store.class.name}(#{opt.join(', ')})"
+      end
+      
       private
       
     end
     
     # ==INSTANCE Methods
-    def initialize(session_id = nil)
-      @store = PStore.new("/tmp/acts_as_status_bar.store")
-      @id = session_id
+    #I paramentri passati hanno la precedenza sui default
+    def initialize(*args)
+      @options = {  :max => MAX, 
+                    :current => 0, 
+                    :start_at => nil, 
+                    :current_at => 0.0, 
+                    :frequency => FREQUENCY,
+                    :type => TYPE,
+                    :message => "" }
+      @options.merge!(args.extract_options!)
+      _define_methods
+      @store = PStore.new(FILE)
+      @id = @options.delete(:id)
       @id = @id.to_i if @id
     end
     
     #restituisce l'id della barra di stato instanziata
+    #o ne crea uno nuovo se non è stato passato
     def id
       @id ||= _new_id
     end
     
+    #Verifica se la barra richiesta esiste
     def valid?
       i = id
       ids.include?(i)
@@ -56,33 +81,6 @@ module ActsAsStatusBar
       _delete(id)
       @id = nil
       @store = nil
-    end
-    
-    #Imposta il fondo scala
-    def max=(value)
-      _set :max, value
-    end
-
-    #legge il fondo scala
-    def max
-      _get(:max) || MAX
-    end
-    
-    #legge il valore corrente
-    def current
-      _get(:current).to_i
-    end
-    
-    def start_at
-      _get(:start_at) || 0
-    end
-    
-    def current_at
-      _get(:current_at) || 0
-    end
-    
-    def frequency
-      _get(:frequency) || FREQUENCY
     end
     
     def percent
@@ -98,7 +96,8 @@ module ActsAsStatusBar
     #e imposta start_at al tempo corrente se è vuoto
     def inc(value=1) 
       _set(:start_at, Time.now.to_f) unless _get(:start_at)
-      _set(:current, current + value)
+      _set(:current_at, Time.now.to_f)
+      _inc(:current,value)
     end
     
     #Restituisce il tempo stimato di fine attività
@@ -110,27 +109,24 @@ module ActsAsStatusBar
     #nel formato comatibile con la status bar
     #:type => :percent  #Normalizza i valori a 100
     def to_xml
-      val = ['Completato', 100]
+      val = ['Completato', 100, ""]
       val = case type
-        when :percent then ["#{current} (#{percent}%) tempo stimato #{finish_in}", percent]
+        when :percent then ["#{current} (#{percent}%) tempo stimato #{finish_in}", percent, message]
       else
-        ["#{current}/#{max} tempo stimato #{finish_in}", percent]
+        ["#{current}/#{max} tempo stimato #{finish_in}", percent, message]
       end if valid?
       
-      Hash['value', val[0], 'percent', val[1]].to_xml
+      Hash['value', val[0], 'percent', val[1], 'message', val[2]].to_xml
     end
     
     private
-    
-    def type
-      _get(:type) || TYPE
-    end
     
     #restituisce tutti gli id
     def ids
       @store.transaction {@store.roots} if @store
     end
     
+    #Cancella tutte le barre
     def _delete_all
       ids.each {|i| _delete(i)}
     end
@@ -142,33 +138,76 @@ module ActsAsStatusBar
       out
     end
     
+    #Crea un nuovo record inizializzando i valori di default con @options
     def _new_id
       out = nil
       @store.transaction do
         out = (@store.roots.sort.last || 0) + 1
-        @store[out] = { :max => MAX, 
-                        :current => nil, 
-                        :start_at => nil, 
-                        :current_at => nil, 
-                        :frequency => FREQUENCY,
-                        :type => TYPE }
+        @store[out] = @options
       end if @store
       out
     end
     
-    def _set(key,value)
-      i = id
-      @store.transaction {@store[i][:current_at] = Time.now.to_f; @store[i][key] = value} if @store
+    #Incrementa un valore
+    #funziona anche con le stringhe
+    def _inc(key,value)
+      _set(key, (_get(key) || 0) + value)
     end
     
+    #Decrementa un valore
+    #Non si è usato inc_ key, value*-1 così funziona anche con le stringhe
+    #Non è vero ma sarebbe bello!!!
+    def _dec(key,value)
+      _set(key, (_get(key) || 0) - value)
+    end
+    
+    #salva un valore
+    def _set(key,value)
+      i = id
+      @store.transaction {@store[i][key] = value} if @store
+    end
+    
+    #recupera un valore
     def _get(key)
       i = id
       @store.transaction(true) {@store[i][key]} if @store
     end
     
+    #cancella la barra con id
     def _delete(i)
       @store.transaction {@store.delete(i)} if @store
     end
+    
+    def _options
+      @options
+    end
+    
+    def _define_methods
+      @options.each_key do |method|
+          #Getters
+          self.class.send(:define_method, method) do
+            _get method.to_sym
+          end
+      
+          #Setters
+          self.class.send(:define_method, "#{method.to_s}=") do |value|
+            _set method, value
+          end
+      
+          #Incrementer
+          self.class.send(:define_method, "inc_#{method.to_s}") do |*args|
+            value = args.first || 1
+            _inc method, value
+          end
+      
+          #Decrementer
+          self.class.send(:define_method, "dec_#{method.to_s}") do |*args|
+            value = args.first || 1
+            _dec method, value
+          end
+      end
+    end
+    
     
   end
 end
