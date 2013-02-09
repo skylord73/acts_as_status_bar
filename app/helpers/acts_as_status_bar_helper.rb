@@ -7,20 +7,21 @@ module ActsAsStatusBarHelper
     url = acts_as_status_bar_status_bar_path(id, :format => :xml)
     total = status_bar.percent
     frequency = status_bar.frequency
-    content_tag(:div, :id => "progress-bar-container", :align => 'center') do
-      content_tag(:p) do
-        concat I18n.t(:label, :scope => :progress_bar)
-        concat content_tag(:a,'',:id => 'progress-value')
-      end +
-      content_tag(:p, '', :id => 'progress-message') +
+    content_tag(:div, :id => "acts-as-status-bar-container", :align => 'center') do
+      content_tag(:p, '', :id => 'acts-as-status-bar-message') +
       content_tag(:div,
-        content_tag(:div,'', :id => "bar"),
-      :id => "progress-bar", :align => 'left')
+        content_tag(:div,'', :id => "acts-as-status-bar"),
+        :id => "acts-as-status-bar-progress-bar", :align => 'left'
+      )
     end +
     javascript_include_tag("acts_as_status_bar_javascript") +
     javascript_tag(%Q[
       function status_bar_init(){
-        var progress = new ActsAsStatusBar('progress-bar-container','progress-bar', 'bar', {
+        var progress = new ActsAsStatusBar(
+          'acts-as-status-bar-container',
+          'acts-as-status-bar-message', 
+          'acts-as-status-bar-progress-bar',
+          'acts-as-status-bar', {
           frequency: #{frequency},
           total: #{total},
           url: "#{url}"

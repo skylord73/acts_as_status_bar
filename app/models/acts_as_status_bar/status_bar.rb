@@ -60,7 +60,7 @@ module ActsAsStatusBar
                     :current_at => 0.0, 
                     :frequency => FREQUENCY,
                     :message => "",
-                    :progress => %q<["#{current} (#{percent}%) tempo stimato #{finish_in}", "#{percent}", "#{message}"]> }
+                    :progress => %q<["#{current}/#{max} (#{percent}%) tempo stimato #{finish_in}", "#{percent}", "#{message}"]> }
       @options.merge!(args.extract_options!)
       @id = @options.delete(:id)
       @id = @id.to_i if @id
