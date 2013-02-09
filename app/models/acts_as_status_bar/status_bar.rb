@@ -10,10 +10,14 @@ module ActsAsStatusBar
   class StatusBar
     include ActionView::Helpers::DateHelper
     
+    #Update frequency in seconds
     FREQUENCY = 10
+    #Default End value
     MAX = 100
-    TYPE = :percent
+    #Default storage path
     FILE = "/tmp/acts_as_status_bar.store"
+    #Default status bar output when progress is finished
+    XML = %q<["Completato", 100, ""]>
     
     # ==CLASS Methods
     class<<self
@@ -55,13 +59,14 @@ module ActsAsStatusBar
                     :start_at => nil, 
                     :current_at => 0.0, 
                     :frequency => FREQUENCY,
-                    :type => TYPE,
-                    :message => "" }
+                    :message => "",
+                    :progress => %q<["#{current} (#{percent}%) tempo stimato #{finish_in}", "#{percent}", "#{message}"]> }
       @options.merge!(args.extract_options!)
       @id = @options.delete(:id)
       @id = @id.to_i if @id
       @store = PStore.new(FILE)
       _define_methods
+      raise unless valid?
     end
     
     def add_field(field, default=nil)
@@ -89,7 +94,7 @@ module ActsAsStatusBar
     end
     
     def percent
-      (current * 100 / max).to_i
+      (current.to_i * 100 / max.to_i).to_i
     end
     
     #decrementa il valore corrente
@@ -107,20 +112,14 @@ module ActsAsStatusBar
     
     #Restituisce il tempo stimato di fine attività
     def finish_in
-      current > 0 ? distance_of_time_in_words((current_at - start_at)/current* max) : "non disponibile"
+      remaining_time = (current_at.to_f - start_at.to_f)*(max.to_i/current.to_i - 1) if current.to_i > 0
+      remaining_time ? distance_of_time_in_words(remaining_time) : "non disponibile"
     end
     
     #restituisce il valore corrente in xml
-    #nel formato comatibile con la status bar
-    #:type => :percent  #Normalizza i valori a 100
+    #nel formato compatibile con la status bar
     def to_xml
-      val = ['Completato', 100, ""]
-      val = case type
-        when :percent then ["#{current} (#{percent}%) tempo stimato #{finish_in}", percent, message]
-      else
-        ["#{current}/#{max} tempo stimato #{finish_in}", percent, message]
-      end if valid?
-      
+      val = valid? ? eval(progress) : eval(XML)
       Hash['value', val[0], 'percent', val[1], 'message', val[2]].to_xml
     end
     
@@ -145,12 +144,17 @@ module ActsAsStatusBar
     
     #Crea un nuovo record inizializzando i valori di default con @options
     def _new_id
-      out = nil
       @store.transaction do
-        out = @store.roots.sort.last.to_i + 1
-        @store[out] = @options
-      end if @store
-      out
+        @id = @store.roots.sort.last.to_i + 1
+      end
+      _store_defaults
+    end
+    
+    #Memorizza i valori di default
+    def _store_defaults
+      i = id
+      @store.transaction {@store[i]= @options}
+      i
     end
     
     #Incrementa un valore
