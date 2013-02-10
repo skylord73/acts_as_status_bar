@@ -13,7 +13,7 @@ module ActsAsStatusBarHelper
   def status_bar_for(object)
     status_bar = ActsAsStatusBar::StatusBar.new(:id => object.status_bar_id)
     mylog("status_bar:  id:#{id.inspect}  status_bar#{status_bar.inspect}")
-    url = acts_as_status_bar_status_bar_path(id, :format => :xml)
+    url = acts_as_status_bar_status_bar_path(object.status_bar_id, :format => :xml)
     frequency = status_bar.frequency
     stylesheet_link_tag('acts_as_status_bar')+
     content_tag(:div, :id => "acts-as-status-bar-container", :align => 'center') do
