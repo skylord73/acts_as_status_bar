@@ -1,0 +1,33 @@
+/* Progress_bar  ============================================================== */
+#acts-as-status-bar-container {
+	width: 500px;
+	height: 70px;
+	background-position: right center;
+	position:absolute;
+	left:30%;
+	top:45%;
+	z-index:10;
+	visibility:hidden;
+	margin:0;
+	padding:10px;
+	background:#EAEBD8;
+	border:3px solid #5970B2;
+}
+#acts-as-status-bar-message {
+	
+}
+#acts-as-status-bar-value {
+	
+}
+#acts-as-status-bar-progress-bar {
+	width: 400px;
+	height: 19px;
+	background: url(../images/acts_as_status_bar_background.gif);
+	background-position: right center;
+}
+#acts-as-status-bar {
+	background: url(../images/acts_as_status_bar_foreground.gif);
+  	background-position: right center;
+	width: 0%;
+	height: 100%;
+}

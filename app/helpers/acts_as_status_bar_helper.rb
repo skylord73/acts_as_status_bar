@@ -1,8 +1,8 @@
 #Add here view and controller helpers
 module ActsAsStatusBarHelper
   # Scrive html script tag del costruttore della progress bar
-  def status_bar(id)
-    status_bar = ActsAsStatusBar::StatusBar.new(:id => id)
+  def status_bar(object)
+    status_bar = ActsAsStatusBar::StatusBar.new(:id => object.status_bar_id)
     mylog("status_bar:  id:#{id.inspect}  status_bar#{status_bar.inspect}")
     url = acts_as_status_bar_status_bar_path(id, :format => :xml)
     total = status_bar.percent

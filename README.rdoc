@@ -6,7 +6,7 @@ Add this line to your application's Gemfile:
  gem 'acts_as_status_bar'
 
 then execute
-  $ bundle install
+ $ bundle install
 
 or install it yourself as:
  $ sudo gem install acts_as_status_bar
@@ -15,18 +15,104 @@ install addons
  $ rails g acts_as_status_bar:install
 
 ==Usage
+In your model 
+ #app/models/home.rb
+ class Home < ActiveRecord::Base
+ 	acts_as_status_bar
+  
+	def my_very_long_task_needing_a_status_bar
+		status_bar_init
+		status_bar.max=10000
+		status_bar.message="My very long task..."
+			10000.times do
+				status_bar.inc
+			end
+		end
+	end
+
 In your controller
-  #app/controllers/home_controller.rb
-  def index
-    ...
-  end
+ #app/controllers/home_controller.rb
+ def new
+ 	@home = Home.new
+	@home.status_bar_init
+ end
+
+ def create
+	@home = Home.new(params[:home])
+	@home.save!
+  @home.status_bar.delete
+ end
 
 In your view
-  #app/views/home/index.html.erb 
-  ...
+ #app/views/home/index.html.erb 
+ <%= form_for(@home) do |f| %>
+ 	  
+	...
+	<%= f.hidden_field :status_bar_id %>
+	<%= f.submit :onclick => 'status_bar_init()' %>
+ <% end %>
+ <%= status_bar(@home) %>
 
-==Localization
+==Functions
+StatusBar uses an external store (PStore) to archive progress data, so all you need to use it
+is the id of the status bar you are using.
 
+This id is stored in your model status_bar_id attribute.
+
+When you status_bar_init in your controller, status_bar_id is nil so a new one is created,
+stored in status_bar_id, and passed to your view with your object.
+
+You need to pass it back to your controller create actions using an hidden field.
+
+When you call status_bar_init from your model the status_bar_id is valorized, so your status_bar
+now points to the same status_bar you passed to your helpers in the view, that create the js progress bar.
+
+Only one id is passed and the magic is done!
+
+There are some functions you can use in your model to customize the behavior of the bar
+===Basic
+*	status_bar_init
+	 Initialize the bar using the id in status_bar_id, ore create a new one if not defined.
+* status_bar.inc(value=1)
+	 Incrent counter by 1 or by value
+*	status_bar.dec(value=1)
+	 Decrement counter by 1 or by value
+* status_bar.max=(value)
+	 Set the max value, that when reached stops the bar
+* status_bar.message=(value)
+	 Set the message in the first line of the bar, you can use it to display dynamic messages
+	 during the process
+	
+===Advanced
+* status_bar.progress=(value)
+   Default value is : %q<["#{current}/#{max} (#{percent}%) tempo stimato #{finish_in}", "#{percent}", "#{message}"]>
+   The string is evaluated and passed to the js as xml.
+ You can customize the first, and the last fileds, while the second (percentage) is used for the visual bar and to
+ stop the bar when 100 is reached.
+ You can see then code to get the usable fields.
+* status_bar.add_field(:field)
+   add a new field to the status bar, you can use to store data, or to customize the output
+   new methods are created to access your new field:
+ * inc_field
+ * dec_field
+ * field=(value)
+ * field
+
+==Administrtion
+Some times you will need to maintain the status bar storage.
+
+You can link to acts_as_status_bar_status_bar_index_path
+
+The controller let you view and delete stored status bar
+
+You can access the bar info pointing to acts_as_status_bar_status_bar_path(id) or
+if you need a more structured info  acts_as_status_bar_status_bar(id, :format => :xml)
+
+==Styling
+You can change the bar style in the acts_as_status_bar.css
+
+==Whislist
+* finding time to create tests...
 
 ==Contributing
 
@@ -38,4 +124,4 @@ In your view
 
 ==Thanks
 
-...
+*	Michele Ferretti, who created the original AjaxProgressBar (http://www.blackbirdblog.it/blog/archivio/2006/03/09/ajax-progress-bar/)

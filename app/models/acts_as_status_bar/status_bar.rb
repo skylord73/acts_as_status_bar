@@ -1,7 +1,7 @@
 require 'pstore'
 
 module ActsAsStatusBar
-  #La classe si basa su PStore, che permette di salvare un hash su file (log/act_as_status_bar.store)
+  #StatusBar is used to support a dynamic status bar, with values, percentage, timing and messages
   #==Utilizzo
   #
   #E' possibile instanziare la barra con dei campi aggiuntivi, passati come lista di argomenti
