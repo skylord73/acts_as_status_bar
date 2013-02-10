@@ -1,5 +1,8 @@
 =ActsAsStatusBar
-ActsAsStatusBar do something...
+ActsAsStatusBar add status bar functionality to your ActiveRecord Models
+I tried to keep it very simple, but powerfull enought to be very usefull.
+
+You will need Prototype to run your gem
 
 ==Setup
 Add this line to your application's Gemfile:
@@ -15,6 +18,8 @@ install addons
  $ rails g acts_as_status_bar:install
 
 ==Usage
+Lets immagine you'll have a Home model, with controller and view...
+
 In your model 
  #app/models/home.rb
  class Home < ActiveRecord::Base
@@ -82,6 +87,9 @@ There are some functions you can use in your model to customize the behavior of 
 * status_bar.message=(value)
 	 Set the message in the first line of the bar, you can use it to display dynamic messages
 	 during the process
+* starus_bar.delete
+   Deletes the current status bar.
+   Do not forget or you will be submerged of useless inactive status bars...
 	
 ===Advanced
 * status_bar.progress=(value)
@@ -98,6 +106,12 @@ There are some functions you can use in your model to customize the behavior of 
  * field=(value)
  * field
 
+* ActsAsStatusBar::StatusBar.delete_all
+   Deletes all bars stored
+* ActsAsStatusBar::StatusBar.all
+	 Return all active status bars
+* ActsAsStatusBar::StatusBar.valid?(id)
+	 Checks if the id passed correspond to a valid status bar
 ==Administrtion
 Some times you will need to maintain the status bar storage.
 

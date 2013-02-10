@@ -1,7 +1,16 @@
-#Add here view and controller helpers
 module ActsAsStatusBarHelper
-  # Scrive html script tag del costruttore della progress bar
-  def status_bar(object)
+  #Use it in your views to activate status bars
+  #You can put it everywhere in your view, you only need to pass it your object
+  #
+  #The only other think you need to do is to add an :onclick => 'status_bar_init()'
+  #to the button/link that activate the bar:
+  #
+  # => <%= f.submit :onclick => 'status_bar_init()' %>
+  #
+  #You can access to the admin page by the helper:
+  # => acts_as_status_bar_status_bar_index_path
+  #
+  def status_bar_for(object)
     status_bar = ActsAsStatusBar::StatusBar.new(:id => object.status_bar_id)
     mylog("status_bar:  id:#{id.inspect}  status_bar#{status_bar.inspect}")
     url = acts_as_status_bar_status_bar_path(id, :format => :xml)
