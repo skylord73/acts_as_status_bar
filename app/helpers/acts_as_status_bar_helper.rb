@@ -10,7 +10,7 @@ module ActsAsStatusBarHelper
     stylesheet_link_tag('acts_as_status_bar')+
     content_tag(:div, :id => "acts-as-status-bar-container", :align => 'center') do
       content_tag(:p, '', :id => 'acts-as-status-bar-message') +
-      content_tag(:p, '', :id => 'acts-as-status-bar-value')
+      content_tag(:p, '', :id => 'acts-as-status-bar-value') +
       content_tag(:div,
         content_tag(:div,'', :id => "acts-as-status-bar"),
         :id => "acts-as-status-bar-progress-bar", :align => 'left'
