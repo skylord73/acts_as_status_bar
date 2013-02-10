@@ -14,7 +14,6 @@ module ActsAsStatusBarHelper
     status_bar = ActsAsStatusBar::StatusBar.new(:id => object.status_bar_id)
     mylog("status_bar:  id:#{id.inspect}  status_bar#{status_bar.inspect}")
     url = acts_as_status_bar_status_bar_path(id, :format => :xml)
-    total = status_bar.percent
     frequency = status_bar.frequency
     stylesheet_link_tag('acts_as_status_bar')+
     content_tag(:div, :id => "acts-as-status-bar-container", :align => 'center') do
@@ -35,7 +34,7 @@ module ActsAsStatusBarHelper
           'acts-as-status-bar-progress-bar',
           'acts-as-status-bar', {
           frequency: #{frequency},
-          total: #{total},
+          total: 100,
           url: "#{url}"
         });
         progress.start();
