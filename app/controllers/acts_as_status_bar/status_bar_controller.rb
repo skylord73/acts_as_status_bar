@@ -5,16 +5,15 @@ module ActsAsStatusBar
     end
     
     def show
-      @status_bar = ActsAsStatusBar::StatusBar.new(:id => params[:id].to_i)
-      mylog("show: #{@status_bar.to_xml.inspect}", "DEBUG", :CYAN)
+      @status_bar = ActsAsStatusBar::StatusBar.new(:id => params[:id]) if ActsAsStatusBar::StatusBar.valid?(params[:id])
       respond_to do |format|
         format.html
-        format.xml {render :inline => @status_bar.to_xml}
+        format.xml {render :inline => ActsAsStatusBar::StatusBar.valid?(params[:id]) ? @status_bar.to_xml : ActsAsStatusBar::StatusBar.to_xml}
       end
     end
     
     def destroy
-      @status_bar = ActsAsStatusBar::StatusBar.new(:id => params[:id].to_i)
+      @status_bar = ActsAsStatusBar::StatusBar.new(:id => params[:id]) if ActsAsStatusBar::StatusBar.valid?(params[:id])
       @status_bar.delete
       redirect_to :action => "index"
     end

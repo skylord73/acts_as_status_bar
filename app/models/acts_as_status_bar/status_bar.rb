@@ -30,14 +30,19 @@ module ActsAsStatusBar
       
       #Verifica se la ba barra esiste
       def valid?(id)
-        store = new(id)
-        store.send(:ids).include?(id)
+        store = new
+        store.send(:ids).include?(id.to_i)
       end
       
       #Visulaizza tutte le barre nel formato {id => {:max, :current, ...}}
       def all
         store = new
         store.send :_all
+      end
+      
+      def to_xml
+         val = eval(XML)
+         Hash['value', val[0], 'percent', val[1], 'message', val[2]].to_xml
       end
       
       def to_s
@@ -65,6 +70,7 @@ module ActsAsStatusBar
       @id = @options.delete(:id)
       @id = @id.to_i if @id
       @store = PStore.new(FILE)
+      raise unless valid?
       _define_methods if valid?
     end
     
@@ -118,7 +124,7 @@ module ActsAsStatusBar
     #restituisce il valore corrente in xml
     #nel formato compatibile con la status bar
     def to_xml
-      val = valid? ? eval(progress) : eval(XML)
+      val = eval(progress)
       Hash['value', val[0], 'percent', val[1], 'message', val[2]].to_xml
     end
     
