@@ -192,9 +192,11 @@ module ActsAsStatusBar
       @options
     end
     
-    #costruisce tutti gli accesso dei metodi in @options
+    #costruisce tutti gli accessors dei metodi
+    #se la barra è nuova usa @options, altrimenti quelli salvati
     def _define_methods
-      @options.each_key do |method|
+      methods = @id ? @store.transaction(true){@store[@id]} : @options
+      methods.each_key do |method|
         _define_method(method)
       end
     end
