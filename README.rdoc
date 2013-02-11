@@ -36,12 +36,7 @@ In your model
 	end
 
 In your controller
- #app/controllers/home_controller.rb
- def new
- 	@home = Home.new
-	@home.status_bar_init
- end
-
+ 
  def create
 	@home = Home.new(params[:home])
 	@home.save!
@@ -50,13 +45,16 @@ In your controller
 
 In your view
  #app/views/home/index.html.erb 
+ <%= status_bar_for(@home) %>
+
  <%= form_for(@home) do |f| %>
- 	  
 	...
 	<%= f.hidden_field :status_bar_id %>
 	<%= f.submit :onclick => 'status_bar_init()' %>
  <% end %>
- <%= status_bar(@home) %>
+ 
+Please note that the status_bar_for helper, MUST be before the form_for with the hidden field.
+(the helper create the bar id, but form_for copy the object so is not possibile update by reference...)
 
 ==Functions
 StatusBar uses an external store (PStore) to archive progress data, so all you need to use it
