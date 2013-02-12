@@ -1,13 +1,13 @@
 module ActsAsStatusBarHelper
-  #Use it in your views to activate status bars
-  #You can put it everywhere in your view, you only need to pass it your object
+  #Use it in your views to activate status bars.
+  #You can put it everywhere in your view, you only need to pass it your object.
   #
-  #The only other think you need to do is to add an :onclick => 'status_bar_init()'
-  #to the button/link that activate the bar:
+  #The only other thing you need to do is to add an :onclick => 'status_bar_init()'
+  #to the button/link that activates the bar:
   #
   # => <%= f.submit :onclick => 'status_bar_init()' %>
   #
-  #You can access to the admin page by the helper:
+  #You can access to the admin page via the helper:
   # => acts_as_status_bar_status_bar_index_path
   #
   def status_bar_for(object)

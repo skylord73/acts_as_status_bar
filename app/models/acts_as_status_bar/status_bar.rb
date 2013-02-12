@@ -28,13 +28,13 @@ module ActsAsStatusBar
         store.send :_delete_all
       end
       
-      #Verifica se la ba barra esiste
+      #Verifica se la barra esiste
       def valid?(id)
         store = new
         store.send(:ids).include?(id.to_i)
       end
       
-      #Visulaizza tutte le barre nel formato {id => {:max, :current, ...}}
+      #Visualizza tutte le barre nel formato {id => {:max, :current, ...}}
       def all
         store = new
         store.send :_all
