@@ -133,7 +133,7 @@ module ActsAsStatusBar
     #Restituisce il tempo stimato di fine attività
     def finish_in
       raise CustomError::InvalidBar unless valid?
-      remaining_time = (current_at.to_f - start_at.to_f)*(max.to_i/current.to_i - 1) if current.to_i > 0
+      remaining_time = (current_at.to_f - start_at.to_f)*(max.to_f/current.to_f - 1.0) if current.to_i > 0
       remaining_time ? distance_of_time_in_words(remaining_time) : "non disponibile"
     end
     
