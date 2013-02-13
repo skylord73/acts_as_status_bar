@@ -10,8 +10,9 @@ module ActsAsStatusBar
       @options.merge!({:default => "Error : #{@options.inspect}"})
       I18n.t("#{self.class.name.gsub(/::/,'.')}", @options )
     end
+    
+    class InvalidBar < CustomError; end
+    
   end 
-
-  #class MyError < CustomError; end
 end
 

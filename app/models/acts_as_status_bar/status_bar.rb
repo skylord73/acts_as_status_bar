@@ -22,29 +22,32 @@ module ActsAsStatusBar
     # ==CLASS Methods
     class<<self
       #Start Private Class Methods
+      #NO BAR is createdusing Class Methods
       
+      #Delete all bars
       def delete_all
         store = new
         store.send :_delete_all
       end
       
-      #Verifica se la barra esiste
+
+      #Check if bar is valid
       def valid?(id)
         store = new
         store.send(:ids).include?(id.to_i)
       end
       
-      #Visualizza tutte le barre nel formato {id => {:max, :current, ...}}
+      #Get all active bars
+      #===Format
+      # {id1 => {:max, :current, ...}
+      #  id2 => {:max, :current, ...}
+      # }
       def all
         store = new
         store.send :_all
       end
       
-      def to_xml
-         val = eval(XML)
-         Hash['value', val[0], 'percent', val[1], 'message', val[2]].to_xml
-      end
-      
+      #to_s
       def to_s
         store = new
         opt = []
@@ -57,37 +60,42 @@ module ActsAsStatusBar
     end
     
     # ==INSTANCE Methods
-    #I paramentri passati hanno la precedenza sui default
+    
+    #Initiliaze bar
+    #===Options
+    #*  no_options        #Initialize bar with a new id, do not store defaults
+    #*  :id => id         #Initialize bar with specific id, and store defaults if new_record?
+    #*  :create => false  #Initialize bar with specific id (if present), without storing defaults
     def initialize(*args)
       @options = {  :max => MAX, 
                     :current => 0, 
                     :start_at => nil, 
                     :current_at => 0.0, 
-                    :frequency => FREQUENCY,
                     :message => "",
                     :progress => %q<["#{current}/#{max} (#{percent}%) tempo stimato #{finish_in}", "#{percent}", "#{message}"]> }
       @options.merge!(args.extract_options!)
       @id = @options.delete(:id)
-      @id = @id.to_i if @id
+      #id usually comes from params, so it must be sure is converted to int...
+      @id = @id.to_i if @if
       @store = PStore.new(FILE)
-      raise unless valid?
-      _define_methods if valid?
+      _init_bar if @id
     end
     
+    #Add new field to bar, and store default value
+    #(Store Data)
     def add_field(field, default=nil)
       _define_method(field.to_sym) unless @options[field.to_sym]
       send("#{field.to_sym}=", default)
     end
     
-    #restituisce l'id della barra di stato instanziata
-    #o ne crea uno nuovo se non è stato passato
+    #Get or create an id
     def id
-      @id ||= _new_id
+      @id ||= Time.now.utc.to_i
     end
     
-    #Verifica se la barra richiesta esiste
+    #checks if bar is new or existent
     def valid?
-      @id.nil? || ids.include?(@id)
+      ids.include?(@id)
     end
 
     #Destroy the bar and return last values
@@ -99,7 +107,8 @@ module ActsAsStatusBar
     end
     
     def percent
-      (current.to_i * 100 / max.to_i).to_i
+      raise CustomError::InvalidBar unless valid?
+      (current.to_i * 100 / max.to_i).to_i if valid?
     end
     
     #decrementa il valore corrente
@@ -110,13 +119,20 @@ module ActsAsStatusBar
     #incrementa il valore corrente
     #e imposta start_at al tempo corrente se è vuoto
     def inc(value=1) 
+      raise CustomError::InvalidBar unless valid?
       _set(:start_at, Time.now.to_f) unless _get(:start_at)
       _set(:current_at, Time.now.to_f)
       _inc(:current,value)
     end
     
+    #Return default frequnecy value, if not passed in helper
+    def frequency
+      FREQUENCY
+    end
+    
     #Restituisce il tempo stimato di fine attività
     def finish_in
+      raise CustomError::InvalidBar unless valid?
       remaining_time = (current_at.to_f - start_at.to_f)*(max.to_i/current.to_i - 1) if current.to_i > 0
       remaining_time ? distance_of_time_in_words(remaining_time) : "non disponibile"
     end
@@ -124,21 +140,30 @@ module ActsAsStatusBar
     #restituisce il valore corrente in xml
     #nel formato compatibile con la status bar
     def to_xml
-      val = eval(progress)
+      val = valid? ? eval(progress) : eval(XML)
       Hash['value', val[0], 'percent', val[1], 'message', val[2]].to_xml
     end
-    
+     
     private
+    
+    #Initialize bar
+    #Store dafaults and create methods
+    def _init_bar
+      unless @options.delete(:create)
+        _store_defaults
+        _define_methods
+      end
+    end
     
     #restituisce tutti gli id
     def ids
-      @store.transaction {@store.roots} if @store
+      @store.transaction {@store.roots}
     end
     
     #cancella la barra con id
     def _delete(i)
       out ={}
-      @store.transaction {out = @store.delete(i)} if @store
+      @store.transaction {out = @store.delete(i)}
       out
     end
     
@@ -154,21 +179,7 @@ module ActsAsStatusBar
       out
     end
     
-    #Crea un nuovo record inizializzando i valori di default con @options
-    def _new_id
-      @store.transaction do
-        @id = @store.roots.sort.last.to_i + 1
-      end
-      _store_defaults
-    end
-    
-    #Memorizza i valori di default
-    def _store_defaults
-      i = id
-      @store.transaction {@store[i]= @options}
-      i
-    end
-    
+
     #Incrementa un valore
     #funziona anche con le stringhe
     def _inc(key,value)
@@ -184,30 +195,37 @@ module ActsAsStatusBar
     
     #salva un valore
     def _set(key,value)
-      i = id
-      @store.transaction {@store[i][key] = value} if @store
+      @store.transaction {@store[@id][key] = value}
     end
     
     #recupera un valore
     def _get(key)
-      i = id
-      @store.transaction(true) {@store[i][key]} if @store
+      @store.transaction(true) {@store[@id][key]}
     end
     
     def _options
       @options
     end
     
-    #costruisce tutti gli accessors dei metodi
-    #se la barra è nuova usa @options, altrimenti quelli salvati
+    #Stores default values
+    #if bar is not yet created
+    def _store_defaults
+      @store.transaction {@store[@id]= @options} unless valid?
+    end
+
+    #Builds accessor methods for every bar attribute
     def _define_methods
-      methods = @id ? @store.transaction(true){@store[@id]} : @options
-      methods.each_key do |method|
+      @store.transaction(true){@store[@id]}.each_key do |method|
         _define_method(method)
       end
     end
     
-    #Costruisce gli accessors per il campo passato
+    #Build acessors for specific atribute
+    #===Accessors
+    #*  inc_attribute(value=1)
+    #*  dec_attribute(value=1)
+    #*  attribute
+    #*  attribute=(value)
     def _define_method(method)
       #Getters
       self.class.send(:define_method, method) do
@@ -231,7 +249,5 @@ module ActsAsStatusBar
         _dec method, value
       end
     end
-    
-    
   end
 end
