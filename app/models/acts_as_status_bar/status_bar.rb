@@ -30,6 +30,7 @@ module ActsAsStatusBar
         store.send :_delete_all
       end
       
+
       #Check if bar is valid
       def valid?(id)
         store = new
