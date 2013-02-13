@@ -9,13 +9,55 @@ module ActsAsStatusBarHelper
   #
   #You can access to the admin page by the helper:
   # => acts_as_status_bar_status_bar_index_path
+  
+  #Use it if you don't have on object.
+  #Id is passed to the controller via session[:acts_as_status_bar][:id]
+  #and can be retrived using status_bar_id(params) in your controller
+  # => #app/views/home/index.html.erb
+  # => <%= status_bar_tag %>
+  # => <%= link_to 'my_link', my_link_action_path, :onclick => 'status_bar_init()' %>
   #
-  def status_bar_for(object)
+  # => #app/controllers/homes_controller.erb
+  # => def action
+  # =>  @home = Home.new
+  # =>  @home.status_bar_id = status_bar_id(params)
+  # =>  @home.do_what_I_need
+  # =>  @home.status_bar.delete
+  # => end
+  def status_bar_tag(frequency = nil)
+    status_bar = ActsAsStatusBar::StatusBar.new
+    frequency = frequency || status_bar.frequency
+    url = acts_as_status_bar_status_bar_path(status_bar.id, :format => :xml)
+    session[:acts_as_status_bar]={:id => status_bar.id}
+    _status_bar_init(frequency, url)
+  end
+  
+  #Used to retrive id from params in controller
+  def status_bar_id(params)
+    params[:acts_as_status_bar].try(:fetch, :id)
+  end
+  
+  #Use it if you have an Object and a form to pass parameters to the controller
+  #The helper populates object.status_bar_id, and you need an hidden field in your form
+  #to pass the id to your object in controller:
+  # => #app/views/home/index.html.erb
+  # => <%= status_bar_for(@home) %>
+  # => <%= form_for(@home) do |f| %>
+  # =>  ...
+  # =>  <%= f.hidden_field :status_bar_id %>
+  # =>  <%= f.submit :onclick => 'status_bar_init()' %>
+  # => <% end %>
+  def status_bar_for(object,frequnecy = nil)
     object.status_bar_init
-    #status_bar = ActsAsStatusBar::StatusBar.new(:id => object.status_bar_id)
-    #mylog("status_bar:  id:#{id.inspect}  status_bar#{status_bar.inspect}")
     url = acts_as_status_bar_status_bar_path(object.status_bar_id, :format => :xml)
-    frequency = object.status_bar.frequency
+    frequency = frequency || object.status_bar.frequency
+    _status_bar_init(frequency, url)
+  end
+  
+  private
+  
+  #Initialize the status bar
+  def _status_bar_init(frequency, url)
     stylesheet_link_tag('acts_as_status_bar')+
     content_tag(:div, :id => "acts-as-status-bar-container", :align => 'center') do
       content_tag(:p, '...', :id => 'acts-as-status-bar-message') +
@@ -41,7 +83,6 @@ module ActsAsStatusBarHelper
         progress.start();
       }
     ])
-    
   end
 end
 

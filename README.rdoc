@@ -36,7 +36,7 @@ In your model
 	end
 
 In your controller
- 
+ #app/controllers/homes_controller.erb
  def create
 	@home = Home.new(params[:home])
 	@home.save!
@@ -62,13 +62,10 @@ is the id of the status bar you are using.
 
 This id is stored in your model status_bar_id attribute.
 
-When you status_bar_init in your controller, status_bar_id is nil so a new one is created,
-stored in status_bar_id, and passed to your view with your object.
-
 You need to pass it back to your controller create actions using an hidden field.
 
 When you call status_bar_init from your model the status_bar_id is valorized, so your status_bar
-now points to the same status_bar you passed to your helpers in the view, that create the js progress bar.
+is created, with the same id of your js.
 
 Only one id is passed and the magic is done!
 
