@@ -53,7 +53,7 @@ In your view
 	<%= f.submit :onclick => 'status_bar_init()' %>
  <% end %>
  
-Please note that the status_bar_for helper, MUST be before the form_for with the hidden field.
+Please note that the status_bar_for helper MUST be before the form_for with the hidden field.
 (The helper creates the bar id, but form_for copies the object so it is not possibile to update by reference...)
 
 ==Functions
