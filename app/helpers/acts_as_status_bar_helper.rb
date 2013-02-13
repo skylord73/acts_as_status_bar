@@ -12,7 +12,7 @@ module ActsAsStatusBarHelper
   
   #Use it if you don't have on object.
   #Id is passed to the controller via session[:acts_as_status_bar][:id]
-  #and can be retrived using status_bar_id(params) in your controller
+  #and can be retrieved using status_bar_id(params) in your controller
   # => #app/views/home/index.html.erb
   # => <%= status_bar_tag %>
   # => <%= link_to 'my_link', my_link_action_path, :onclick => 'status_bar_init()' %>

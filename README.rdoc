@@ -62,7 +62,7 @@ is the id of the status bar you are using.
 
 This id is stored in your model status_bar_id attribute.
 
-You need to pass it back to your controller create actions using an hidden field.
+You need to pass it back to your controller's "create" actions using an hidden field.
 
 When you call status_bar_init from your model the status_bar_id is valorized, so your status_bar
 is created, with the same id of your js.
