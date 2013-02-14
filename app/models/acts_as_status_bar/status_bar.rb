@@ -21,7 +21,7 @@ module ActsAsStatusBar
     
     # ==CLASS Methods
     class<<self
-      #Start Private Class Methods
+      #Start Public Class Methods
       #NO BAR is created using Class Methods
       
       #Delete all bars
@@ -55,6 +55,7 @@ module ActsAsStatusBar
         "#{store.class.name}(#{opt.join(', ')})"
       end
       
+      # Start Private Class Methods
       private
       
     end
@@ -101,7 +102,6 @@ module ActsAsStatusBar
     #Destroys the bar and returns last values
     def delete
       out = _delete(id) if @store && @id
-      puts("\n\n out = #{out.inspect}")
       @id = nil
       @store = nil
       out
