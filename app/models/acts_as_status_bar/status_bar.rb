@@ -100,7 +100,7 @@ module ActsAsStatusBar
 
     #Destroys the bar and returns last values
     def delete
-      out = _delete(id) if @store && valid?
+      out = _delete(id) if @store
       @id = nil
       @store = nil
       out
