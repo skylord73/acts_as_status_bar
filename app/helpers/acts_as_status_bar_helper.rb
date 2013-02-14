@@ -10,7 +10,7 @@ module ActsAsStatusBarHelper
   #You can access to the admin page via the helper:
   # => acts_as_status_bar_status_bar_index_path
   
-  #Use it if you don't have on object.
+  #Use it if you don't have an object.
   #Id is passed to the controller via session[:acts_as_status_bar][:id]
   #and can be retrieved using status_bar_id(params) in your controller
   # => #app/views/home/index.html.erb
@@ -37,9 +37,9 @@ module ActsAsStatusBarHelper
     params[:acts_as_status_bar].try(:fetch, :id)
   end
   
-  #Use it if you have an Object and a form to pass parameters to the controller
+  #Use it if you have an Object and a form to pass parameters to the controller.
   #The helper populates object.status_bar_id, and you need an hidden field in your form
-  #to pass the id to your object in controller:
+  #to pass the id to your object in the controller:
   # => #app/views/home/index.html.erb
   # => <%= status_bar_for(@home) %>
   # => <%= form_for(@home) do |f| %>
