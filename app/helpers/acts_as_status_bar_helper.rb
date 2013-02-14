@@ -32,7 +32,7 @@ module ActsAsStatusBarHelper
     _status_bar_init(frequency, url)
   end
   
-  #Used to retrive id from params in controller
+  #Used to retrive id from params in the controller.
   def status_bar_id(params)
     params[:acts_as_status_bar].try(:fetch, :id)
   end
