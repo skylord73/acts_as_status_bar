@@ -101,6 +101,7 @@ module ActsAsStatusBar
     #Destroys the bar and returns last values
     def delete
       out = _delete(id) if @store && @id
+      puts("\n\n out = #{out.inspect}")
       @id = nil
       @store = nil
       out
