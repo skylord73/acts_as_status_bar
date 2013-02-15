@@ -94,14 +94,14 @@ module ActsAsStatusBar
       @id ||= Time.now.utc.to_i
     end
     
-    #Checks if bar is new or existent
+    #Checks if the bar is new or already existent
     def valid?
       ids.include?(@id)
     end
 
     #Destroys the bar and returns last values
     def delete
-      out = _delete(id) if @store
+      out = _delete(id) if @store && valid?
       @id = nil
       @store = nil
       out
