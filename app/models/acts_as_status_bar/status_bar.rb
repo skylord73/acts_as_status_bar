@@ -164,7 +164,8 @@ module ActsAsStatusBar
     #Cancella la barra con id
     def _delete(i)
       out ={}
-      @store.transaction {out = @store.delete(i)}
+      # @store.transaction {out = @store.delete(i)}
+      out = @store.delete(i)
       out
     end
     
