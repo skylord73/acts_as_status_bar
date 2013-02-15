@@ -99,9 +99,9 @@ module ActsAsStatusBar
       ids.include?(@id)
     end
 
-    #Destroys the bar and returns last values
+    #Destroys the bar and returns its last values
     def delete
-      out = _delete(id) if @store && valid?
+      out = _delete(id) if @store
       @id = nil
       @store = nil
       out
