@@ -48,7 +48,7 @@ module ActsAsStatusBarHelper
   
   #Used to retrive id from params in controller
   def status_bar_id(params)
-    params[:acts_as_status_bar].try(:fetch, :id)
+    session[:acts_as_status_bar].try(:fetch, :id)
   end
   
   #Use it if you have an Object and a form to pass parameters to the controller.
