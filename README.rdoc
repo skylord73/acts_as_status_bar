@@ -8,19 +8,19 @@ You will need Prototype to run your gem.
 Add this line to your application's Gemfile:
  gem 'acts_as_status_bar'
 
-then execute
+then execute:
  $ bundle install
 
 or install it yourself as:
  $ sudo gem install acts_as_status_bar
 
-install addons
+install addon:
  $ rails g acts_as_status_bar:install
 
 ==Usage
 Let's imagine you have a Home model, with a controller and a view...
 
-In your model 
+In your model: 
  #app/models/home.rb
  class Home < ActiveRecord::Base
  	acts_as_status_bar
@@ -35,7 +35,7 @@ In your model
 		end
 	end
 
-In your controller
+In your controller:
  #app/controllers/homes_controller.erb
  def create
 	@home = Home.new(params[:home])
@@ -43,7 +43,7 @@ In your controller
   @home.status_bar.delete
  end
 
-In your view
+In your view:
  #app/views/home/index.html.erb 
  <%= status_bar_for(@home) %>
 
@@ -78,7 +78,7 @@ There are some functions you can use in your model to customize the behavior of 
 *	status_bar.dec(value=1)
 	 Decrements counter by 1 or by value.
 * status_bar.max=(value)
-	 Sets the max value, that, once reached, stops the bar
+	 Sets the max value, that, once reached, stops the bar.
 * status_bar.message=(value)
 	 Set the message in the first line of the bar: you can use it to display dynamic messages
 	 during the process.
@@ -113,8 +113,8 @@ You can link to acts_as_status_bar_status_bar_index_path .
 
 The controller lets you check and delete stored status bars.
 
-You can access the bar info pointing to acts_as_status_bar_status_bar_path(id) or
-if you need a more structured info  acts_as_status_bar_status_bar(id, :format => :xml)
+You can access the bar info pointing to acts_as_status_bar_status_bar_path(id) or,
+if you need a more structured info, to acts_as_status_bar_status_bar(id, :format => :xml)
 
 ==Styling
 You can change the bar style in the acts_as_status_bar.css .
