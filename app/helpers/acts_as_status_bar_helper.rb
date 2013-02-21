@@ -32,6 +32,20 @@ module ActsAsStatusBarHelper
     _status_bar_init(frequency, url)
   end
   
+  #Use with status_bar_ta, in controller to initialize and destroy bar
+  # => @home = Home.find(params[:id])
+  # => status_bar_init(@home) do
+  #     @home.destroy
+  # => end
+  #
+  def status_bar_init(object, &block)
+    object.status_bar_id = status_bar_id(params)
+    object.status_bar_init
+    bar = object.status_bar
+    yield block
+    bar.delete
+  end
+  
   #Used to retrive id from params in controller
   def status_bar_id(params)
     params[:acts_as_status_bar].try(:fetch, :id)
