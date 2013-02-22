@@ -15,6 +15,7 @@ class MyClass < ActiveRecord::Base
   def save
   end
   
+  #Initializes an object and its relative status bar passing its id as an options hash
   def initialize(*args)
     options = args.extract_options!
     @status_bar_id = options.delete(:status_bar_id) if options[:status_bar_id]
@@ -59,10 +60,10 @@ describe ActsAsStatusBar::StatusBar do
     # object.save
     puts "\n\n\n status_bar.inspect = #{status_bar.inspect}"
     puts "\n\n\n object.status_bar.inspect = #{object.status_bar.inspect}"
-    status_bar.inc
+    status_bar.inc(10)
     puts "\n\n\n status_bar.current.inspect = #{status_bar.current.inspect}"
     puts "\n\n\n object.status_bar.current.inspect = #{object.status_bar.current.inspect}"
-        object.status_bar.current.should equal(1)
+    object.status_bar.current.should equal(10)
   end
   
   it "should be deleted once the parent object is destroyed" do
