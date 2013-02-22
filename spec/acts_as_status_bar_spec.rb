@@ -1,9 +1,8 @@
 require 'spec_helper'
-require 'acts_as_status_bar/app/helpers/acts_as_status_bar_helper.rb'
 
 #########################################
 
-#Define a class which implements the status bar gem.
+#Defines a class which implements the status bar gem.
 class MyClass
   acts_as_status_bar
   
@@ -41,5 +40,9 @@ describe ActsAsStatusBar::StatusBar do
   it "should be destroyed by destroying the parent object" do
     object.destroy!.should be_true, object.errors
     object.status_bar.should be nil
+  end
+  
+  it "should assign the right id to #status_bar_id method" do
+    object.status_bar_id.should equal(object.status_bar.id)
   end
 end
