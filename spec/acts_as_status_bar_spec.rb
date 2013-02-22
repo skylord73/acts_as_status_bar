@@ -42,6 +42,8 @@ describe ActsAsStatusBar::StatusBar do
   end
   
   it "should be assigned correctly" do
+    puts "\n\n\n status_bar.inspect = #{status_bar.inspect}"
+    puts "\n\n\n object.status_bar.inspect = #{object.status_bar.inspect}"
     object.status_bar.should equal(status_bar)
   end
 
