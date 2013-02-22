@@ -6,7 +6,7 @@ module ActsAsStatusBar
     
     # Class methods for the mixin
     module ClassMethods
-      # defines the class method to inject monitor methods
+      # Defines the class method to inject monitor methods
       #
       #==Example
       # class MyModel < ActiveRecord::Base
@@ -15,11 +15,11 @@ module ActsAsStatusBar
       #   private
       #
       #   def warn_test?
-      #     whatever you want that return true in a warning condition
+      #     whatever you want that returns true in a warning condition
       #   end
       #
       #   def error_test?
-      #     whatever you want that return true in an error condition
+      #     whatever you want that returns true in an error condition
       #   end
       def acts_as_status_bar(options={})
         attr_accessor :status_bar_id

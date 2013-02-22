@@ -2,10 +2,9 @@ require 'pstore'
 
 module ActsAsStatusBar
   #StatusBar is used to support a dynamic status bar, with values, percentage, timing and messages.
-  #==Utilizzo
+  #==Usage
   #
-  #E' possibile instanziare la barra con dei campi aggiuntivi, passati come lista di argomenti
-  #e relativi valori di default
+  #It is possible to instantiate the bar with additional fields, passed as a list of arguments and their relative default values.
   #new(:id => nil, )
   class StatusBar
     include ActionView::Helpers::DateHelper
@@ -24,20 +23,20 @@ module ActsAsStatusBar
       #Start Public Class Methods
       #NO BAR is created using Class Methods
       
-      #Delete all bars
+      #Deletes all bars
       def delete_all
         store = new
         store.send :_delete_all
       end
       
 
-      #Check if bar is valid
+      #Checks if the bar is valid
       def valid?(id)
         store = new
         store.send(:ids).include?(id.to_i)
       end
       
-      #Get all active bars
+      #It returns all active bars
       #===Format
       # {id1 => {:max, :current, ...}
       #  id2 => {:max, :current, ...}
@@ -62,10 +61,10 @@ module ActsAsStatusBar
     
     # ==INSTANCE Methods
     
-    #Initialize the bar
+    #Initializes the bar
     #===Options
-    #*  no_options        #Initializes the bar with a new id, do not store defaults
-    #*  :id => id         #Initializes the bar with a specific id, and stores defaults if new_record?
+    #*  no_options        #Initializes the bar with a new id and doesn't store defaults
+    #*  :id => id         #Initializes the bar with a specific id and stores defaults if new_record?
     #*  :create => false  #Initializes the bar with a specific id (if present), without storing defaults
     def initialize(*args)
       @options = {  :max => MAX, 
@@ -76,13 +75,13 @@ module ActsAsStatusBar
                     :progress => %q<["#{current}/#{max} (#{percent}%) tempo stimato #{finish_in}", "#{percent}", "#{message}"]> }
       @options.merge!(args.extract_options!)
       @id = @options.delete(:id)
-      #id usually comes from params, so it must be sure it is converted to int...
+      #id usually comes from params, so it must be sure it is converted to int
       @id = @id.to_i if @id
       @store = PStore.new(FILE)
       _init_bar if @id
     end
     
-    #Adds a new field to the bar, and stores default value
+    #Adds a new field to the bar and stores default value
     #(Store Data)
     def add_field(field, default=nil)
       _define_method(field.to_sym) unless @options[field.to_sym]
@@ -112,12 +111,12 @@ module ActsAsStatusBar
       (current.to_i * 100 / max.to_i).to_i if valid?
     end
     
-    #Decrementa il valore corrente
+    #Decrements current value
     def dec(value=1)
       inc(value*-1)
     end
     
-    #Incrementa il valore corrente
+    #Increments current value and sets start_at at current time if not set yet
     #e imposta start_at al tempo corrente se è vuoto
     def inc(value=1) 
       raise CustomError::InvalidBar unless valid?
@@ -131,15 +130,14 @@ module ActsAsStatusBar
       FREQUENCY
     end
     
-    #Restituisce il tempo stimato di fine attività
+    #Returns estimated completion time
     def finish_in
       raise CustomError::InvalidBar unless valid?
       remaining_time = (current_at.to_f - start_at.to_f)*(max.to_f/current.to_f - 1.0) if current.to_i > 0
       remaining_time ? distance_of_time_in_words(remaining_time) : "non disponibile"
     end
     
-    #Restituisce il valore corrente in xml
-    #nel formato compatibile con la status bar
+    #Returns current value in xml in a format compatible with the status bar
     def to_xml
       val = valid? ? eval(progress) : eval(XML)
       Hash['value', val[0], 'percent', val[1], 'message', val[2]].to_xml
@@ -147,8 +145,7 @@ module ActsAsStatusBar
      
     private
     
-    #Initializes the bar
-    #Stores dafaults and creates methods
+    #Initializes the bar, stores defaults and dinamycally creates methods
     def _init_bar
       unless @options.delete(:create)
         _store_defaults
@@ -156,24 +153,24 @@ module ActsAsStatusBar
       end
     end
     
-    #Restituisce tutti gli id
+    #Returns all ids
     def ids
       @store.transaction {@store.roots}
     end
     
-    #Cancella la barra con id
+    #Deletes the bar marked with a specific id
     def _delete(i)
       out ={}
       @store.transaction {out = @store.delete(i)}
       out
     end
     
-    #Cancella tutte le barre
+    #Deletes all bars
     def _delete_all
       ids.each {|i| _delete(i)}
     end
     
-    #Sarebbe carino li ordinasse... ma è una palla!!
+    #Returns all status bars
     def _all
       out = {}
       ids.each {|i| @store.transaction(true) {out[i] = @store[i]}}
@@ -181,35 +178,35 @@ module ActsAsStatusBar
     end
     
 
-    #Incrementa un valore
-    #Funziona anche con le stringhe
+    #Increments a value
+    #It also works with strings
     def _inc(key,value)
       _set(key, (_get(key) || 0) + value)
     end
     
-    #Decrementa un valore
-    #Non si è usato inc_ key, value*-1 così funziona anche con le stringhe
-    #Non è vero ma sarebbe bello!!!
+    #Decrements a value
+    #inc_ key, value*-1 was not used so that i can also work with strings
+    #[Not implemented yet... It would be a nice thing to add in the future...]
     def _dec(key,value)
       _set(key, (_get(key) || 0) - value)
     end
     
-    #Salva un valore
+    #Saves a value
     def _set(key,value)
       @store.transaction {@store[@id][key] = value}
     end
     
-    #Recupera un valore
+    #Retrieves a value
     def _get(key)
       @store.transaction(true) {@store[@id][key]}
     end
     
+    #Returns options
     def _options
       @options
     end
     
-    #Stores default values
-    #if bar is not yet created
+    #Stores default values if the bar is not created yet
     def _store_defaults
       @store.transaction {@store[@id]= @options} unless valid?
     end
