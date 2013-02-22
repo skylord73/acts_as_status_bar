@@ -5,7 +5,7 @@
 
 source "http://rubygems.org"
 
-gem  "rails", "~>3.0.15"
+gem  'rails', '3.0.15'
 gem 'mysql2', '< 0.3'
 
 group :development, :test do
@@ -13,6 +13,7 @@ group :development, :test do
   gem "capybara", ">= 0.4.0"
   gem "sqlite3"
   gem "single_test"
+  gem 'rspec-rails'
 end
 
 #gemspec
