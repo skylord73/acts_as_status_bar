@@ -32,7 +32,7 @@ module ActsAsStatusBarHelper
     _status_bar_init(frequency, url)
   end
   
-  #Use it with status_bar or status_bar_tag in the controller to initialize or destroy the bar.
+  #Use it with status_bar or status_bar_tag in the controller to initialize and then destroy the bar.
   # => @home = Home.find(params[:id])
   # => status_bar_init(@home) do
   #     @home.destroy

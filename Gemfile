@@ -15,5 +15,5 @@ group :development, :test do
   gem "single_test"
 end
 
-gemspec
+#gemspec
 
