@@ -12,14 +12,25 @@ class MyClass < ActiveRecord::Base
   
   MAX = 100
   
+  def save
+  end
+  
   def initialize(*args)
     @options = args.extract_options!
-    status_bar_init(self)
+   
+    end
     # super
   end
   
+  def destroy
+    status_bar_init(self)
+    bar = status_bar_init(self) do
+      self.save
+    end  
+  end
+  
   def clear_bar
-    status_bar_init
+    status_bar_init(self)
     status_bar.message = "Deleting..."
     status_bar.max = MAX
   end
