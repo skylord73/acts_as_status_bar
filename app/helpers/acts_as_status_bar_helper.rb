@@ -38,7 +38,7 @@ module ActsAsStatusBarHelper
   #     @home.destroy
   # => end
   #
-  #It returns the value of status_bar.delete, an hash with parameters of the last update.
+  #It returns the value of status_bar.delete, a hash with parameters of the last update.
   #You can use it to display info like process duration, object updated, ...
   # 
   def status_bar_init(object, &block)
