@@ -5,6 +5,7 @@ require 'acts_as_status_bar'
 
 #Defines a model class which implements the status bar gem.
 class MyClass# < ActiveRecord::Base
+  require 'acts_as_status_bar'
   include ActsAsStatusBarHelper
   include ActsAsStatusBar::ClassMethods
   
