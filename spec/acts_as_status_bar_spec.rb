@@ -8,9 +8,6 @@ class MyClass < ActiveRecord::Base
   # Helper which makes all the status_bar functions available.
   acts_as_status_bar
   
-  after_destroy :clear_bar
-  after_save :clear_bar
-  
   MAX = 100
   
   def save
@@ -32,11 +29,9 @@ class MyClass < ActiveRecord::Base
     end  
   end
   
-  def clear_bar
-    # status_bar_init(self)
-    # status_bar.message = "Deleting the bar..."
-    status_bar.delete
-  end
+  # def clear_bar
+    # status_bar.delete
+  # end
 end
 
 #########################################
