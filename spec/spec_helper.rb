@@ -4,7 +4,7 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
-require '../app/helpers/acts_as_status_bar_helper.rb'
+require '../../app/helpers/acts_as_status_bar_helper.rb'
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
