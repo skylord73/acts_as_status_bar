@@ -14,7 +14,7 @@ class MyClass < ActiveRecord::Base
   
   def initialize(*args)
     @options = args.extract_options!
-    status_bar_init#(self)
+    status_bar_init(self)
     # super
   end
   
