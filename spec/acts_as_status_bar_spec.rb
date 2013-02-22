@@ -3,11 +3,13 @@ require 'active_record'
 #########################################
 
 #Defines a model class which implements the status bar gem.
-class MyClass < ActiveRecord::Base
+class MyClass# < ActiveRecord::Base
   # include ActsAsStatusBarHelper
   # include ActsAsStatusBar::ClassMethods
   
   acts_as_status_bar
+  
+  before_destroy :clear_bar
   
   MAX = 100
   
@@ -16,7 +18,7 @@ class MyClass < ActiveRecord::Base
     super
   end
   
-  def clear_destroy
+  def clear_bar
     status_bar_init
     status_bar.message = "Deleting..."
     status_bar.max = MAX
