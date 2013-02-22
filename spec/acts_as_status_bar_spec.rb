@@ -1,8 +1,8 @@
 require 'spec_helper'
-
+require 'active_record'
 #########################################
 
-#Defines a class which implements the status bar gem.
+#Defines a model class which implements the status bar gem.
 class MyClass < ActiveRecord::Base
   # include ActsAsStatusBarHelper
   # include ActsAsStatusBar::ClassMethods
