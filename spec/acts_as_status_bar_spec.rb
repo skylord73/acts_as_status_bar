@@ -4,7 +4,8 @@ require 'spec_helper'
 
 #Defines a model class which implements the status bar gem.
 class MyClass < ActiveRecord::Base
- 
+  
+  # Helper which makes all the status_bar functions available.
   acts_as_status_bar
   
   before_destroy :clear_bar
@@ -12,7 +13,7 @@ class MyClass < ActiveRecord::Base
   MAX = 100
   
   def initialize(*options) 
-    status_bar_init#(self)
+    status_bar_init(self)
     # super
   end
   
@@ -43,13 +44,13 @@ describe ActsAsStatusBar::StatusBar do
   it "should be assigned correctly" do
     object.status_bar.should equal(status_bar)
   end
+
+  it "should assign the right id to #status_bar_id method" do
+    object.status_bar_id.should equal(object.status_bar.id)
+  end
   
   it "should be destroyed by destroying the parent object" do
     object.destroy!.should be_true, object.errors
     object.status_bar.should be nil
-  end
-  
-  it "should assign the right id to #status_bar_id method" do
-    object.status_bar_id.should equal(object.status_bar.id)
   end
 end
