@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'active_record'
+require 'acts_as_status_bar'
 #########################################
 
 #Defines a model class which implements the status bar gem.
