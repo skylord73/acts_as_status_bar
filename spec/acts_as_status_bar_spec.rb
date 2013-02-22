@@ -2,7 +2,7 @@ require 'spec_helper'
 
 #########################################
 
-# Definisco una classe di prova che implementerà la status bar.
+#Define a class which implements the status bar gem.
 class MyClass
   acts_as_status_bar
   
