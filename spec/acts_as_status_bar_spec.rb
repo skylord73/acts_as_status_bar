@@ -14,7 +14,7 @@ class MyClass < ActiveRecord::Base
   
   def initialize(*args)
     @options = args.extract_options!
-    super
+    # super
   end
   
   def clear_bar
