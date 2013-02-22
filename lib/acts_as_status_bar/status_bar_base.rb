@@ -10,7 +10,7 @@ module ActsAsStatusBar
       #
       #==Example
       # class MyModel < ActiveRecord::Base
-      #   acts_as_monitor
+      #   acts_as_status_bar
       #   ...
       #   private
       #
