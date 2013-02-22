@@ -25,7 +25,7 @@ class MyClass < ActiveRecord::Base
   def destroy
     # status_bar_init(self)
     bar = status_bar_init(self) do
-      self = self.delete
+      self.delete
     end  
   end
   
