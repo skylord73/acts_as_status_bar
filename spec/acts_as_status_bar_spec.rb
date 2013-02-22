@@ -11,7 +11,7 @@ class MyClass
   MAX = 100
   
   def initialize(*options) 
-    status_bar_init
+    status_bar_init(self)
     super
   end
   
