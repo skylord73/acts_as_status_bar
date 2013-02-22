@@ -17,8 +17,8 @@ class MyClass < ActiveRecord::Base
   
   def initialize(*args)
     options = args.extract_options!
-    # puts"\n\noptions[:status_bar_id] = #{options[:status_bar_id]}"
-    @status_bar_id = options.delete[:status_bar_id] if options[:status_bar_id]
+    puts"\n\noptions[:status_bar_id] = #{options[:status_bar_id]}"
+    @status_bar_id = options.delete[:status_bar_id] #if options[:status_bar_id]
     puts"\n\n@status_bar_id = #{@status_bar_id}"
     self.status_bar = ActsAsStatusBar::StatusBar.new(:id => @status_bar_id)
     # super
