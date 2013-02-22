@@ -13,7 +13,7 @@ class MyClass < ActiveRecord::Base
   
   def initialize(*options) 
     status_bar_init#(self)
-    super
+    # super
   end
   
   def clear_bar
