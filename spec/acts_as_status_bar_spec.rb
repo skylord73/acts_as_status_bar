@@ -5,14 +5,14 @@ require 'spec_helper'
 #Defines a class which implements the status bar gem.
 class MyClass
   include ActsAsStatusBarHelper
+  include ActsAsStatusBar::ClassMethods
   
   acts_as_status_bar
-  require 'spec_helper'
   
   MAX = 100
   
   def initialize(*options) 
-    status_bar_init(self)
+    status_bar_init#(self)
     super
   end
   
