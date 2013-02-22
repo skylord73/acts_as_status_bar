@@ -36,7 +36,7 @@ describe ActsAsStatusBar::StatusBar do
   let(:object) { MyClass.new(:status_bar_id => status_bar.id) }
   
   it "should be valid" do
-    StatusBar.should be_a(Class)
+    ActsAsStatusBar::StatusBar.should be_a(Class)
   end
   
   it "should be destroyed by destroying the parent object" do
