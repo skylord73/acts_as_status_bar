@@ -1,14 +1,10 @@
 require 'spec_helper'
-require 'active_record'
-require 'acts_as_status_bar'
+
 #########################################
 
 #Defines a model class which implements the status bar gem.
-class MyClass# < ActiveRecord::Base
-  require 'acts_as_status_bar'
-  include ActsAsStatusBarHelper
-  include ActsAsStatusBar::ClassMethods
-  
+class MyClass < ActiveRecord::Base
+ 
   acts_as_status_bar
   
   before_destroy :clear_bar
@@ -42,6 +38,10 @@ describe ActsAsStatusBar::StatusBar do
   
   it "should be valid" do
     ActsAsStatusBar::StatusBar.should be_a(Class)
+  end
+  
+  it "should be assigned correctly" do
+    object.status_bar.should equal(status_bar)
   end
   
   it "should be destroyed by destroying the parent object" do
