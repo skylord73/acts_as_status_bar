@@ -8,8 +8,9 @@ class MyClass
   
   MAX = 100
   
-  def initialize 
+  def initialize(*options) 
     status_bar_init
+    super
   end
   
   def clear_destroy
