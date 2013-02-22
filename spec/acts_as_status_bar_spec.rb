@@ -39,7 +39,7 @@ describe ActsAsStatusBar::StatusBar do
   
   it "should be valid" do
     ActsAsStatusBar::StatusBar.should be_a(Class)
-    status_bar.should be_valid, status_bar.errors
+    status_bar.should be_valid
   end
   
   # it "should be assigned correctly" do
