@@ -12,8 +12,8 @@ class MyClass < ActiveRecord::Base
   
   MAX = 100
   
-  def initialize
-    status_bar_init(self)
+  def initialize(*args)
+    @options = args.extract_options!
     super
   end
   
