@@ -18,12 +18,12 @@ class MyClass < ActiveRecord::Base
   def initialize(*args)
     @options = args.extract_options!
     @status_bar_id = @options.delete[:id] if @options[:id]
-    status_bar_init(self) {}
+    status_bar_init#(self) {}
     # super
   end
   
   def destroy
-    status_bar_init(self)
+    # status_bar_init(self)
     bar = status_bar_init(self) do
       self.save
     end  
