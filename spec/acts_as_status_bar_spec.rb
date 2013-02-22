@@ -42,11 +42,11 @@ describe ActsAsStatusBar::StatusBar do
     status_bar.should be_valid
   end
   
-  # it "should be assigned correctly" do
-    # puts "\n\n\n status_bar.inspect = #{status_bar.inspect}"
-    # puts "\n\n\n object.status_bar.inspect = #{object.status_bar.inspect}"
-    # object.status_bar.should equal(status_bar)
-  # end
+  it "should be assigned correctly" do
+    puts "\n\n\n status_bar.inspect = #{status_bar.inspect}"
+    puts "\n\n\n object.status_bar.inspect = #{object.status_bar.inspect}"
+    object.status_bar.should equal(status_bar)
+  end
 
   # it "should assign the right id to #status_bar_id method" do
     # object.status_bar_id.should equal(object.status_bar.id)
