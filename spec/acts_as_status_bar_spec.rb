@@ -14,10 +14,8 @@ class MyClass
   
   def clear_destroy
     status_bar_init
-    status_bar.message = "Cancellazione in corso..."
+    status_bar.message = "Deleting..."
     status_bar.max = MAX
-    billing_bodies.each {|bb| bb.status_bar_id = self.status_bar_id}
-    mylog("clear_destroy: bar:#{status_bar.inspect}")
   end
 end
 
@@ -39,7 +37,7 @@ describe ActsAsStatusBar::StatusBar do
     ActsAsStatusBar.should be_a(Class)
   end
   
-  it "viene cancellata insieme all'oggetto padre" do
+  it "should be destroyed by destroying the parent object" do
     object.destroy!.should be_true, object.errors
     object.status_bar.should be nil
   end
