@@ -12,7 +12,7 @@ class MyClass < ActiveRecord::Base
   
   MAX = 100
   
-  def initialize(*options) 
+  def initialize
     status_bar_init(self)
     # super
   end
