@@ -4,6 +4,7 @@ require 'spec_helper'
 
 #Defines a class which implements the status bar gem.
 class MyClass
+  include ActsAsStatusBarHelper
   # acts_as_status_bar
   require 'spec_helper'
   
@@ -23,13 +24,11 @@ end
 
 #########################################
 
-
 describe ActsAsStatusBar do
   it "should be valid" do
     ActsAsStatusBar.should be_a(Module)
   end
 end
-
 
 describe ActsAsStatusBar::StatusBar do
 
@@ -37,7 +36,7 @@ describe ActsAsStatusBar::StatusBar do
   let(:object) { MyClass.new(:status_bar_id => status_bar.id) }
   
   it "should be valid" do
-    ActsAsStatusBar.should be_a(Class)
+    StatusBar.should be_a(Class)
   end
   
   it "should be destroyed by destroying the parent object" do

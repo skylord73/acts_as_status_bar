@@ -13,7 +13,7 @@ group :development, :test do
   gem "capybara", ">= 0.4.0"
   gem "sqlite3"
   gem "single_test"
-  gem 'rspec-rails'
+  gem "rspec-rails", "~> 2.0"
 end
 
 gemspec
