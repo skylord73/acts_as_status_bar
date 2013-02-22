@@ -73,7 +73,7 @@ module ActsAsStatusBarHelper
     session[:acts_as_status_bar].try(:fetch, :id)
   end
   
-  #Initializes the status bar
+  #Initialize the status bar
   def _status_bar_init(frequency, url)
     stylesheet_link_tag('acts_as_status_bar')+
     content_tag(:div, :id => "acts-as-status-bar-container", :align => 'center') do

@@ -23,14 +23,14 @@ module ActsAsStatusBar
       #Start Public Class Methods
       #NO BAR is created using Class Methods
       
-      #Deletes all bars
+      #Delete all bars
       def delete_all
         store = new
         store.send :_delete_all
       end
       
 
-      #Checks if the bar is valid
+      #Check if the bar is valid
       def valid?(id)
         store = new
         store.send(:ids).include?(id.to_i)
@@ -61,11 +61,11 @@ module ActsAsStatusBar
     
     # ==INSTANCE Methods
     
-    #Initializes the bar
+    #Initialize the bar
     #===Options
-    #*  no_options        #Initializes the bar with a new id and doesn't store defaults
-    #*  :id => id         #Initializes the bar with a specific id and stores defaults if new_record?
-    #*  :create => false  #Initializes the bar with a specific id (if present), without storing defaults
+    #*  no_options        #Initialize the bar with a new id and don't store defaults
+    #*  :id => id         #Initialize the bar with a specific id and store defaults if new_record?
+    #*  :create => false  #Initialize the bar with a specific id (if present), without storing defaults
     def initialize(*args)
       @options = {  :max => MAX, 
                     :current => 0, 
@@ -81,24 +81,24 @@ module ActsAsStatusBar
       _init_bar if @id
     end
     
-    #Adds a new field to the bar and stores default value
+    #Add a new field to the bar and store default value
     #(Store Data)
     def add_field(field, default=nil)
       _define_method(field.to_sym) unless @options[field.to_sym]
       send("#{field.to_sym}=", default)
     end
     
-    #Gets or creates an id
+    #Get or create an id
     def id
       @id ||= Time.now.utc.to_i
     end
     
-    #Checks if the bar is new or already existent
+    #Check if the bar is new or already existent
     def valid?
       ids.include?(@id)
     end
 
-    #Destroys the bar and returns its last values
+    #Destroy the bar and return its last values
     def delete
       out = _delete(id) if @store
       @id = nil
@@ -111,13 +111,12 @@ module ActsAsStatusBar
       (current.to_i * 100 / max.to_i).to_i if valid?
     end
     
-    #Decrements current value
+    #Decrement current value
     def dec(value=1)
       inc(value*-1)
     end
     
-    #Increments current value and sets start_at at current time if not set yet
-    #e imposta start_at al tempo corrente se è vuoto
+    #Increment current value and sets start_at at current time (if not set yet)
     def inc(value=1) 
       raise CustomError::InvalidBar unless valid?
       _set(:start_at, Time.now.to_f) unless _get(:start_at)
@@ -125,19 +124,19 @@ module ActsAsStatusBar
       _inc(:current,value)
     end
     
-    #Returns default frequency value, if not passed in the helper
+    #Return default frequency value, if not passed in the helper
     def frequency
       FREQUENCY
     end
     
-    #Returns estimated completion time
+    #Return estimated completion time
     def finish_in
       raise CustomError::InvalidBar unless valid?
       remaining_time = (current_at.to_f - start_at.to_f)*(max.to_f/current.to_f - 1.0) if current.to_i > 0
       remaining_time ? distance_of_time_in_words(remaining_time) : "non disponibile"
     end
     
-    #Returns current value in xml in a format compatible with the status bar
+    #Return current value in xml in a format compatible with the status bar
     def to_xml
       val = valid? ? eval(progress) : eval(XML)
       Hash['value', val[0], 'percent', val[1], 'message', val[2]].to_xml
@@ -145,7 +144,7 @@ module ActsAsStatusBar
      
     private
     
-    #Initializes the bar, stores defaults and dinamycally creates methods
+    #Initialize the bar, stores defaults and dinamycally create methods
     def _init_bar
       unless @options.delete(:create)
         _store_defaults
@@ -153,24 +152,24 @@ module ActsAsStatusBar
       end
     end
     
-    #Returns all ids
+    #Return all ids
     def ids
       @store.transaction {@store.roots}
     end
     
-    #Deletes the bar marked with a specific id
+    #Delete the bar marked with a specific id
     def _delete(i)
       out ={}
       @store.transaction {out = @store.delete(i)}
       out
     end
     
-    #Deletes all bars
+    #Delete all bars
     def _delete_all
       ids.each {|i| _delete(i)}
     end
     
-    #Returns all status bars
+    #Return all status bars
     def _all
       out = {}
       ids.each {|i| @store.transaction(true) {out[i] = @store[i]}}
@@ -178,40 +177,40 @@ module ActsAsStatusBar
     end
     
 
-    #Increments a value
+    #Increment a value
     #It also works with strings
     def _inc(key,value)
       _set(key, (_get(key) || 0) + value)
     end
     
-    #Decrements a value
-    #inc_ key, value*-1 was not used so that i can also work with strings
+    #Decrement a value
+    #inc_ key, value*-1 was not used so that it can also work with strings
     #[Not implemented yet... It would be a nice thing to add in the future...]
     def _dec(key,value)
       _set(key, (_get(key) || 0) - value)
     end
     
-    #Saves a value
+    #Save a value
     def _set(key,value)
       @store.transaction {@store[@id][key] = value}
     end
     
-    #Retrieves a value
+    #Retrieve a value
     def _get(key)
       @store.transaction(true) {@store[@id][key]}
     end
     
-    #Returns options
+    #Return options
     def _options
       @options
     end
     
-    #Stores default values if the bar is not created yet
+    #Store default values if the bar is not created yet
     def _store_defaults
       @store.transaction {@store[@id]= @options} unless valid?
     end
 
-    #Builds accessor methods for every bar's attribute
+    #Build accessor methods for every bar's attribute
     def _define_methods
       @store.transaction(true){@store[@id]}.each_key do |method|
         _define_method(method)

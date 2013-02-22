@@ -1,5 +1,25 @@
 require 'spec_helper'
 
+#########################################
+
+#Defines a class which implements the status bar gem.
+class MyClass
+  acts_as_status_bar
+  
+  MAX = 100
+  
+  def initialize 
+    status_bar_init
+  end
+  
+  def clear_destroy
+    status_bar_init
+    status_bar.message = "Deleting..."
+    status_bar.max = MAX
+  end
+end
+
+#########################################
 
 
 describe ActsAsStatusBar do
@@ -10,27 +30,6 @@ end
 
 
 describe ActsAsStatusBar::StatusBar do
-
-  #########################################
-
-  #Defines a class which implements the status bar gem.
-  class MyClass
-    acts_as_status_bar
-    
-    MAX = 100
-    
-    def initialize 
-      status_bar_init
-    end
-    
-    def clear_destroy
-      status_bar_init
-      status_bar.message = "Deleting..."
-      status_bar.max = MAX
-    end
-  end
-
-  #########################################
 
   let(:status_bar) { ActsAsStatusBar::StatusBar.new(:id => 1) }
   let(:object) { MyClass.new(:status_bar_id => status_bar.id) }
