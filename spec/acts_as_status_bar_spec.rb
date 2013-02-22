@@ -4,7 +4,7 @@ require 'spec_helper'
 
 #Defines a class which implements the status bar gem.
 class MyClass
-  acts_as_status_bar
+  # acts_as_status_bar
   
   MAX = 100
   
