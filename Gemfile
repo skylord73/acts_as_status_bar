@@ -16,5 +16,5 @@ group :development, :test do
   gem 'rspec-rails'
 end
 
-#gemspec
+gemspec
 
