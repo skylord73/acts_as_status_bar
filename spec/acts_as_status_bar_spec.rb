@@ -16,8 +16,8 @@ class MyClass < ActiveRecord::Base
   end
   
   def initialize(*args)
-    @options = args.extract_options!
-    @status_bar_id = @options.delete[:status_bar_id] if @options[:status_bar_id]
+    options = args.extract_options!
+    status_bar_id = options.delete[:status_bar_id] if options[:status_bar_id]
     self.status_bar = ActsAsStatusBar::StatusBar.new(:id => status_bar_id)
     # super
   end
