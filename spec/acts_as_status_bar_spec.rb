@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'acts_as_status_bar/app/helpers/acts_as_status_bar_helper.rb'
 
 #########################################
 
