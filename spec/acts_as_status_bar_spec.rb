@@ -35,7 +35,7 @@ class MyClass < ActiveRecord::Base
   def clear_bar
     status_bar_init(self)
     status_bar.message = "Deleting the bar..."
-    status_bar.max = MAX
+    status_bar.delete
   end
 end
 
