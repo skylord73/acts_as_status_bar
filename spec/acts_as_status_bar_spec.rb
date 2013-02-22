@@ -8,7 +8,8 @@ class MyClass < ActiveRecord::Base
   # Helper which makes all the status_bar functions available.
   acts_as_status_bar
   
-  before_destroy :clear_bar
+  after_destroy :clear_bar
+  after_save :clear_bar
   
   MAX = 100
   
@@ -18,8 +19,8 @@ class MyClass < ActiveRecord::Base
   #Initializes an object and its relative status bar passing its id as an options hash
   def initialize(*args)
     options = args.extract_options!
-    @status_bar_id = options.delete(:status_bar_id) if options[:status_bar_id]
-    puts"\n\n@status_bar_id = #{@status_bar_id}"
+    status_bar_id = options.delete(:status_bar_id) if options[:status_bar_id]
+    puts"\n\nstatus_bar_id = #{status_bar_id}"
     self.status_bar = ActsAsStatusBar::StatusBar.new(:id => @status_bar_id)
     # super
   end
@@ -33,7 +34,7 @@ class MyClass < ActiveRecord::Base
   
   def clear_bar
     status_bar_init(self)
-    status_bar.message = "Deleting..."
+    status_bar.message = "Deleting the bar..."
     status_bar.max = MAX
   end
 end
@@ -57,18 +58,21 @@ describe ActsAsStatusBar::StatusBar do
   end
   
   it "should be assigned correctly" do
-    # object.save
-    puts "\n\n\n status_bar.inspect = #{status_bar.inspect}"
-    puts "\n\n\n object.status_bar.inspect = #{object.status_bar.inspect}"
+    #I'm incrementing the status bar 'current' attribute by the value of 10.
     status_bar.inc(10)
-    puts "\n\n\n status_bar.current.inspect = #{status_bar.current.inspect}"
-    puts "\n\n\n object.status_bar.current.inspect = #{object.status_bar.current.inspect}"
-    object.status_bar.current.should equal(10)
+    #I'm assuring status_bar and object_status_bar both refer to the really same bar
+    #checking that 'current' attribute was incremented.
+    status_bar.current.should equal(object.status_bar.current)
+  end
+  
+  it "should be deleted once the parent object is saved" do
+    object.save
+    object.status_bar.should be nil
   end
   
   it "should be deleted once the parent object is destroyed" do
-    object.save
-    object.status_bar.should equal(status_bar)
+    object.destroy
+    object.status_bar.should be nil
   end
 
   # it "should assign the right id to #status_bar_id method" do
