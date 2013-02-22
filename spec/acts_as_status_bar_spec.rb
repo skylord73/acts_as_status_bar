@@ -59,6 +59,8 @@ describe ActsAsStatusBar::StatusBar do
     # object.save
     puts "\n\n\n status_bar.inspect = #{status_bar.inspect}"
     puts "\n\n\n object.status_bar.inspect = #{object.status_bar.inspect}"
+    status_bar.inc
+    object.status_bar.current.should equal(1)
   end
   
   it "should be deleted once the parent object is destroyed" do
