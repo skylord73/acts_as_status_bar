@@ -39,8 +39,9 @@ In your controller:
  #app/controllers/homes_controller.erb
  def create
 	@home = Home.new(params[:home])
-	@home.save!
-  @home.status_bar.delete
+	status_bar_init(@home) do
+		@home.save!
+  end
  end
 
 In your view:
@@ -55,6 +56,11 @@ In your view:
  
 Please note that the status_bar_for helper MUST be before the form_for with the hidden field.
 (The helper creates the bar id, but form_for copies the object so it is not possibile to update by reference...)
+
+Or, if you don't have an object,
+
+<%= status_bar_tag %>
+<%=link_tag "MyLink", my_url, :onclick => 'status_bar_init()' %>
 
 ==Functions
 StatusBar uses an external store (PStore) to archive progress data, so all you need to use it
