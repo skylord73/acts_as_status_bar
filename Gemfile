@@ -5,13 +5,15 @@
 
 source "http://rubygems.org"
 
-gem  "rails", "~>3.0.15"
+gem  'rails', '3.0.15'
+gem 'mysql2', '< 0.3'
 
 group :development, :test do
   gem "ruby-debug"
   gem "capybara", ">= 0.4.0"
   gem "sqlite3"
   gem "single_test"
+  gem "rspec-rails", "~> 2.0"
 end
 
 gemspec

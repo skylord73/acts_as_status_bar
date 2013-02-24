@@ -32,14 +32,14 @@ module ActsAsStatusBarHelper
     _status_bar_init(frequency, url)
   end
   
-  #Use with status_bar or status_bar_tag, in controller to initialize and destroy bar
+  #Use it with status_bar or status_bar_tag in the controller to initialize and then destroy the bar.
   # => @home = Home.find(params[:id])
   # => status_bar_init(@home) do
   #     @home.destroy
   # => end
   #
-  #Return status_bar.delete, hash, with parameter of last update
-  #you can use it to display info like process duration, object updated, ...
+  #It returns the value of status_bar.delete, a hash with parameters of the last update.
+  #You can use it to display info like process duration, object updated, ...
   # 
   def status_bar_init(object, &block)
     object.status_bar_id ||= status_bar_id(params)
@@ -49,7 +49,7 @@ module ActsAsStatusBarHelper
     bar.delete
   end
   
-  #Use it if you have an Object and a form to pass parameters to the controller.
+  #Use it if you have an object and a form to pass parameters to the controller.
   #The helper populates object.status_bar_id, and you need an hidden field in your form
   #to pass the id to your object in the controller:
   # => #app/views/home/index.html.erb
@@ -68,7 +68,7 @@ module ActsAsStatusBarHelper
   
   private
   
-  #Used to retrive id from params in controller
+  #Used to retrieve id from params in controller
   def status_bar_id(params)
     session[:acts_as_status_bar].try(:fetch, :id)
   end

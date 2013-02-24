@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
   s.version          = ActsAsStatusBar::VERSION
   
   s.add_dependency "rails", "~>3.0.15"
+  s.add_dependency  "mysql2"
   
 end
 
