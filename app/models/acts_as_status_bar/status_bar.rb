@@ -14,7 +14,7 @@ module ActsAsStatusBar
     #Default End value
     MAX = 100
     #Default storage path
-    FILE = "tmp/acts_as_status_bar.store"
+    FILE = "db/acts_as_status_bar.store"
     #Default status bar output when progress is finished
     XML = %q<["Completato", 100, ""]>
     
