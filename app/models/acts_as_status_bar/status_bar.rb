@@ -116,7 +116,7 @@ module ActsAsStatusBar
       inc(value*-1)
     end
     
-    #Increment current value and sets start_at at current time (if not set yet)
+    #Increment current value and set start_at at current time (if not set yet)
     def inc(value=1) 
       raise CustomError::InvalidBar unless valid?
       _set(:start_at, Time.now.to_f) unless _get(:start_at)
@@ -144,7 +144,7 @@ module ActsAsStatusBar
      
     private
     
-    #Initialize the bar, stores defaults and dinamycally create methods
+    #Initialize the bar, store defaults and dinamycally create methods
     def _init_bar
       unless @options.delete(:create)
         _store_defaults
