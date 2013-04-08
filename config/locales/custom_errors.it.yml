@@ -1,4 +1,4 @@
 it:
   ActsAsStatusBar:
     CustomError:
-      InvalidBar: "Progress Bar non valida!}"
+      InvalidBar: "Progress Bar non valida!"
