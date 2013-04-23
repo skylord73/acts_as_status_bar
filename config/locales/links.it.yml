@@ -1,0 +1,7 @@
+it:
+  shared:
+    links:
+      # admin::acts_as_statusBar
+      # acts_as_status_bar_status_bar_index: "Status Bar"
+      acts_as_status_bar_status_bars: "Status Bar"
+      
