@@ -107,6 +107,7 @@ module ActsAsStatusBar
     end
     
     def percent
+      mylog("percent#{max.inspect}")
       raise CustomError::InvalidBar unless valid? || max != 0
       (current.to_i * 100 / max.to_i).to_i if valid?
     end
