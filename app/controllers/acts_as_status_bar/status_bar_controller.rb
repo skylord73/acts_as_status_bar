@@ -10,9 +10,9 @@ module ActsAsStatusBar
         format.html
         format.xml {render :inline => @status_bar.to_xml}
       end 
-    rescue => e
-      flash[:alert] = e.message
-      redirect_to :action => 'show', :controller => 'status_bar'
+#    rescue => e
+#      flash[:alert] = e.message
+#      redirect_to :action => 'show', :controller => 'status_bar'
     end
     
     def destroy
