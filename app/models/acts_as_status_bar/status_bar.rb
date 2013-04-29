@@ -107,7 +107,7 @@ module ActsAsStatusBar
     end
     
     def percent
-      mylog("percent#{max.inspect}")
+      mylog("percent = #{max.inspect}")
       raise CustomError::InvalidBar if !valid? || max == 0
       (current.to_i * 100 / max.to_i).to_i              
     end
@@ -122,7 +122,9 @@ module ActsAsStatusBar
       raise CustomError::InvalidBar unless valid?
       _set(:start_at, Time.now.to_f) unless _get(:start_at)
       _set(:current_at, Time.now.to_f)
-      _inc(:current,value)
+      inc_value = _inc(:current,value)
+      mylog("inc inc_value: #{inc_value}")
+      inc_value
     end
     
     #Return default frequency value, if not passed in the helper
