@@ -107,9 +107,11 @@ module ActsAsStatusBar
     end
     
     def percent
-      mylog("percent = #{max.inspect}")
-      raise CustomError::InvalidBar if !valid? || max == 0
-      (current.to_i * 100 / max.to_i).to_i              
+      #mylog("percent = #{max.inspect}")
+      unless  !valid? || max == 0
+        #raise CustomError::InvalidBar if !valid? || max == 0
+        (current.to_i * 100 / max.to_i).to_i 
+      end             
     end
     
     #Decrement current value
@@ -119,12 +121,14 @@ module ActsAsStatusBar
     
     #Increment current value and set start_at at current time (if not set yet)
     def inc(value=1) 
-      raise CustomError::InvalidBar unless valid?
-      _set(:start_at, Time.now.to_f) unless _get(:start_at)
-      _set(:current_at, Time.now.to_f)
-      inc_value = _inc(:current,value)
-      mylog("inc inc_value: #{inc_value}")
-      inc_value
+      if valid?
+        #raise CustomError::InvalidBar unless valid?
+        _set(:start_at, Time.now.to_f) unless _get(:start_at)
+        _set(:current_at, Time.now.to_f)
+        inc_value = _inc(:current,value)
+        mylog("inc inc_value: #{inc_value}")
+        inc_value
+      end   
     end
     
     #Return default frequency value, if not passed in the helper
@@ -133,11 +137,14 @@ module ActsAsStatusBar
     end
     
     #Return estimated completion time
-    def finish_in
-      raise CustomError::InvalidBar unless valid?
-      remaining_time = (current_at.to_f - start_at.to_f)*(max.to_f/current.to_f - 1.0) if current.to_i > 0
-      remaining_time ? distance_of_time_in_words(remaining_time) : "non disponibile"
-    end
+    def finish_in 
+      if valid?
+        #raise CustomError::InvalidBar unless valid?
+        remaining_time = (current_at.to_f - start_at.to_f)*(max.to_f/current.to_f - 1.0) if current.to_i > 0
+        remaining_time ? distance_of_time_in_words(remaining_time) : "non disponibile"      
+      end
+    end                                                                                        
+    
     
     #Return current value in xml in a format compatible with the status bar
     def to_xml
