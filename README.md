@@ -36,6 +36,7 @@ In your model:
 			end
 		end
 	end
+	
 	```
 
 In your controller:
@@ -48,6 +49,7 @@ In your controller:
 		@home.save!
   end
  end
+
  ```
 
 In your view:
@@ -60,7 +62,8 @@ In your view:
 	...
 	<%= f.hidden_field :status_bar_id %>
 	<%= f.submit :onclick => 'status_bar_init()' %>
- <% end %>
+ <% end %> 
+
  ```
 
 Please note that the status_bar_for helper MUST be before the form_for with the hidden field.
@@ -70,6 +73,7 @@ Or, if you don't have an object,
  ```ruby
   <%= status_bar_tag %>
   <%=link_tag "MyLink", my_url, :onclick => 'status_bar_init()' %>
+
   ```
 
 ==Functions
