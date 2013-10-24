@@ -37,7 +37,6 @@ In your model:
 		end
 	end
 	
-	```
 
 In your controller:
  
