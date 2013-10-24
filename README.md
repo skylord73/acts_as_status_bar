@@ -22,9 +22,9 @@ Let's imagine you have a Home model, with a controller and a view...
 
 In your model:
 
- ```ruby 
- #app/models/home.rb
- class Home < ActiveRecord::Base
+```ruby 
+#app/models/home.rb
+class Home < ActiveRecord::Base
  	acts_as_status_bar
   
 	def my_very_long_task_needing_a_status_bar
@@ -34,8 +34,8 @@ In your model:
 			10000.times do
 				status_bar.inc
 			end
-		end
 	end
+end
 	
 
 In your controller:
