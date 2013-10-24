@@ -36,44 +36,45 @@ class Home < ActiveRecord::Base
 			end
 	end
 end
-	
+
+```	
 
 In your controller:
  
- ```ruby
- #app/controllers/homes_controller.erb
- def create
-	@home = Home.new(params[:home])
+```ruby
+#app/controllers/homes_controller.erb
+def create
+  @home = Home.new(params[:home])
 	status_bar_init(@home) do
-		@home.save!
+	  @home.save!
   end
- end
+end
 
- ```
+```
 
 In your view:
 
- ```ruby
- #app/views/home/index.html.erb 
- <%= status_bar_for(@home) %>
+```ruby
+#app/views/home/index.html.erb 
+<%= status_bar_for(@home) %>
 
- <%= form_for(@home) do |f| %>
-	...
+<%= form_for(@home) do |f| %>
+  ...
 	<%= f.hidden_field :status_bar_id %>
 	<%= f.submit :onclick => 'status_bar_init()' %>
- <% end %> 
+<% end %> 
 
- ```
+```
 
 Please note that the status_bar_for helper MUST be before the form_for with the hidden field.
 (The helper creates the bar id, but form_for copies the object so it is not possibile to update by reference...)
 
 Or, if you don't have an object,
- ```ruby
+```ruby
   <%= status_bar_tag %>
   <%=link_tag "MyLink", my_url, :onclick => 'status_bar_init()' %>
 
-  ```
+```
 
 ==Functions
 StatusBar uses an external store (PStore) to archive progress data, so all you need to use it
