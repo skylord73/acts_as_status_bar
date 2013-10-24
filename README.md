@@ -1,10 +1,10 @@
-=ActsAsStatusBar
+#ActsAsStatusBar
 ActsAsStatusBar adds status bar functionality to your ActiveRecord Models.
 I tried to keep it very simple, but powerful enough to be very useful.
 
 You will need Prototype to run your gem.
 
-==Setup
+##Setup
 Add this line to your application's Gemfile:
  gem 'acts_as_status_bar'
 
@@ -17,7 +17,7 @@ or install it yourself as:
 install addon:
  $ rails g acts_as_status_bar:install
 
-==Usage
+##Usage
 Let's imagine you have a Home model, with a controller and a view...
 
 In your model:
@@ -76,7 +76,7 @@ Or, if you don't have an object,
 
 ```
 
-==Functions
+##Functions
 StatusBar uses an external store (PStore) to archive progress data, so all you need to use it
 is the id of the status bar you are using.
 
@@ -90,7 +90,7 @@ is created, with the same id of your js.
 Only one id is passed and the magic is done!
 
 There are some functions you can use in your model to customize the behavior of the bar.
-===Basic
+###Basic
 * status_bar_init
 	 Initializes the bar using the id in status_bar_id, or creates a new one if not defined.
 * status_bar.inc(value=1)
@@ -106,7 +106,7 @@ There are some functions you can use in your model to customize the behavior of 
    Deletes the current status bar.
    Do not forget it or you will be submerged of useless inactive status bars...
 	
-===Advanced
+###Advanced
 * status_bar.progress=(value)
    Default value is : %q<["#{current}/#{max} (#{percent}%) tempo stimato #{finish_in}", "#{percent}", "#{message}"]>
    The string is evaluated and passed to the js as xml.
@@ -126,7 +126,8 @@ There are some functions you can use in your model to customize the behavior of 
 	 Return all active status bars.
 * ActsAsStatusBar::StatusBar.valid?(id)
 	 Checks if the id passed corresponds to a valid status bar.
-==Administration
+
+##Administration
 Some times you will need to maintain the status bar storage.
 
 You can link to acts_as_status_bar_status_bar_index_path .
@@ -136,13 +137,13 @@ The controller lets you check and delete stored status bars.
 You can access the bar info pointing to acts_as_status_bar_status_bar_path(id) or,
 if you need a more structured info, to acts_as_status_bar_status_bar(id, :format => :xml)
 
-==Styling
+##Styling
 You can change the bar style in the acts_as_status_bar.css .
 
-==Whislist
+##Whislist
 * finding time to create tests...
 
-==Contributing
+##Contributing
 
 1. Fork it
 2. Create your feature branch (git checkout -b my-new-feature)
@@ -150,6 +151,6 @@ You can change the bar style in the acts_as_status_bar.css .
 4. Push to the branch (git push origin my-new-feature)
 5. Create new Pull Request
 
-==Thanks
+##Thanks
 
 *	Michele Ferretti, who created the original AjaxProgressBar (http://www.blackbirdblog.it/blog/archivio/2006/03/09/ajax-progress-bar/)
