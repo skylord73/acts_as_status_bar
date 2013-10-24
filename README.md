@@ -54,7 +54,7 @@ end
 
 In your view:
 
-```ruby
+```erb
 #app/views/home/index.html.erb 
 <%= status_bar_for(@home) %>
 
@@ -70,7 +70,7 @@ Please note that the status_bar_for helper MUST be before the form_for with the 
 (The helper creates the bar id, but form_for copies the object so it is not possibile to update by reference...)
 
 Or, if you don't have an object,
-```ruby
+```erb
   <%= status_bar_tag %>
   <%=link_tag "MyLink", my_url, :onclick => 'status_bar_init()' %>
 
