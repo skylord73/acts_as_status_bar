@@ -20,7 +20,9 @@ install addon:
 ==Usage
 Let's imagine you have a Home model, with a controller and a view...
 
-In your model: 
+In your model:
+
+ ```ruby 
  #app/models/home.rb
  class Home < ActiveRecord::Base
  	acts_as_status_bar
@@ -34,8 +36,11 @@ In your model:
 			end
 		end
 	end
+	```
 
 In your controller:
+ 
+ ```ruby
  #app/controllers/homes_controller.erb
  def create
 	@home = Home.new(params[:home])
@@ -43,8 +48,11 @@ In your controller:
 		@home.save!
   end
  end
+ ```
 
 In your view:
+
+ ```ruby
  #app/views/home/index.html.erb 
  <%= status_bar_for(@home) %>
 
@@ -53,14 +61,16 @@ In your view:
 	<%= f.hidden_field :status_bar_id %>
 	<%= f.submit :onclick => 'status_bar_init()' %>
  <% end %>
- 
+ ```
+
 Please note that the status_bar_for helper MUST be before the form_for with the hidden field.
 (The helper creates the bar id, but form_for copies the object so it is not possibile to update by reference...)
 
 Or, if you don't have an object,
-
-<%= status_bar_tag %>
-<%=link_tag "MyLink", my_url, :onclick => 'status_bar_init()' %>
+ ```ruby
+  <%= status_bar_tag %>
+  <%=link_tag "MyLink", my_url, :onclick => 'status_bar_init()' %>
+  ```
 
 ==Functions
 StatusBar uses an external store (PStore) to archive progress data, so all you need to use it
